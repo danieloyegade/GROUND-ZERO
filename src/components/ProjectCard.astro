@@ -6,8 +6,7 @@ interface Props {
   indexLabel: string;
   layoutClass: string;
   frameClass: string;
-  objectPosition?: string;
-  objectFit?: "cover" | "contain";
+  cropFocus?: "center" | "top" | "upper-third";
 }
 
 const {
@@ -17,9 +16,14 @@ const {
   indexLabel,
   layoutClass,
   frameClass,
-  objectPosition = "center center",
-  objectFit = "cover",
+  cropFocus = "center",
 } = Astro.props;
+
+const objectPositionMap = {
+  center: "center center",
+  top: "center top",
+  "upper-third": "center 28%",
+} as const;
 ---
 
 <article class:list={["project-card", layoutClass]}>
@@ -29,7 +33,7 @@ const {
       src={image}
       alt={title}
       class="project-card__image"
-      style={`object-position: ${objectPosition}; object-fit: ${objectFit};`}
+      style={`object-position: ${objectPositionMap[cropFocus]}; object-fit: cover;`}
       loading="lazy"
       decoding="async"
     />

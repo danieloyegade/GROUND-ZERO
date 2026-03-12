@@ -4,10 +4,9 @@ slug: "project-4"
 image: "/images/project-4.jpg"
 descriptor: "Short descriptor for project 4."
 display:
-  frame: "landscape"
-  slot: "landscape-right"
-  objectPosition: "52% 38%"
-  objectFit: "cover"
+  orientation: "landscape"
+  cropFocus: "upper-third"
+  size: "medium"
 status: "placeholder"
 ---
 

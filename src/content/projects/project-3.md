@@ -4,10 +4,9 @@ slug: "project-3"
 image: "/images/project-3.jpg"
 descriptor: "Short descriptor for project 3."
 display:
-  frame: "wide"
-  slot: "wide-center"
-  objectPosition: "62% 54%"
-  objectFit: "cover"
+  orientation: "wide"
+  cropFocus: "center"
+  size: "large"
 status: "placeholder"
 ---
 

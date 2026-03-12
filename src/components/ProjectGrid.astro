@@ -6,20 +6,9 @@ interface ProjectEntry {
   image: string;
   descriptor: string;
   display: {
-    frame: "portrait" | "landscape" | "wide" | "hero";
-    slot:
-      | "hero-left"
-      | "portrait-right-high"
-      | "wide-center"
-      | "landscape-right"
-      | "portrait-left"
-      | "portrait-right"
-      | "hero-center"
-      | "portrait-right-low"
-      | "landscape-left"
-      | "landscape-right-low";
-    objectPosition: string;
-    objectFit: "cover" | "contain";
+    orientation: "portrait" | "landscape" | "wide";
+    cropFocus: "center" | "top" | "upper-third";
+    size: "small" | "medium" | "large" | "hero";
   };
 }
 
@@ -29,54 +18,73 @@ interface Props {
 
 const { projects } = Astro.props;
 
-const slotMap: Record<ProjectEntry["display"]["slot"], { layoutClass: string; indexLabel: string }> = {
-  "hero-left": {
-    layoutClass: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-1",
-    indexLabel: "01",
+const placementPattern: Array<Record<ProjectEntry["display"]["size"], string>> = [
+  {
+    small: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-1",
+    medium: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-1",
+    large: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-1",
+    hero: "col-span-12 md:col-span-8 xl:col-span-7 xl:col-start-1",
   },
-  "portrait-right-high": {
-    layoutClass: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-9 md:mt-20 xl:mt-24",
-    indexLabel: "02",
+  {
+    small: "col-span-12 md:col-span-4 xl:col-span-3 xl:col-start-10 md:mt-16 xl:mt-20",
+    medium: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-9 md:mt-20 xl:mt-24",
+    large: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-8 md:mt-20 xl:mt-24",
+    hero: "col-span-12 md:col-span-7 xl:col-span-5 xl:col-start-8 md:mt-20 xl:mt-24",
   },
-  "wide-center": {
-    layoutClass: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-3 md:mt-8 xl:mt-10",
-    indexLabel: "03",
+  {
+    small: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-4 md:mt-8 xl:mt-10",
+    medium: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-3 md:mt-8 xl:mt-10",
+    large: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-2 md:mt-8 xl:mt-10",
+    hero: "col-span-12 md:col-span-8 xl:col-span-7 xl:col-start-2 md:mt-8 xl:mt-10",
   },
-  "landscape-right": {
-    layoutClass: "col-span-12 md:col-span-6 xl:col-span-4 xl:col-start-9 xl:-mt-12",
-    indexLabel: "04",
+  {
+    small: "col-span-12 md:col-span-5 xl:col-span-3 xl:col-start-10 xl:-mt-10",
+    medium: "col-span-12 md:col-span-6 xl:col-span-4 xl:col-start-9 xl:-mt-12",
+    large: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-8 xl:-mt-12",
+    hero: "col-span-12 md:col-span-7 xl:col-span-5 xl:col-start-8 xl:-mt-12",
   },
-  "portrait-left": {
-    layoutClass: "col-span-12 md:col-span-8 xl:col-span-7 xl:col-start-1 md:mt-10 xl:mt-14",
-    indexLabel: "05",
+  {
+    small: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-1 md:mt-10 xl:mt-14",
+    medium: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-1 md:mt-10 xl:mt-14",
+    large: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-1 md:mt-10 xl:mt-14",
+    hero: "col-span-12 md:col-span-8 xl:col-span-7 xl:col-start-1 md:mt-10 xl:mt-14",
   },
-  "portrait-right": {
-    layoutClass: "col-span-12 md:col-span-4 xl:col-span-3 xl:col-start-10 md:mt-24 xl:mt-28",
-    indexLabel: "06",
+  {
+    small: "col-span-12 md:col-span-4 xl:col-span-3 xl:col-start-10 md:mt-24 xl:mt-28",
+    medium: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-9 md:mt-24 xl:mt-28",
+    large: "col-span-12 md:col-span-6 xl:col-span-4 xl:col-start-9 md:mt-24 xl:mt-28",
+    hero: "col-span-12 md:col-span-7 xl:col-span-5 xl:col-start-8 md:mt-24 xl:mt-28",
   },
-  "hero-center": {
-    layoutClass: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-2 md:mt-6 xl:mt-8",
-    indexLabel: "07",
+  {
+    small: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-2 md:mt-6 xl:mt-8",
+    medium: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-2 md:mt-6 xl:mt-8",
+    large: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-2 md:mt-6 xl:mt-8",
+    hero: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-2 md:mt-6 xl:mt-8",
   },
-  "portrait-right-low": {
-    layoutClass: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-7 md:mt-16 xl:mt-20",
-    indexLabel: "08",
+  {
+    small: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-9 md:mt-16 xl:mt-20",
+    medium: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-8 md:mt-16 xl:mt-20",
+    large: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-7 md:mt-16 xl:mt-20",
+    hero: "col-span-12 md:col-span-8 xl:col-span-7 xl:col-start-6 md:mt-16 xl:mt-20",
   },
-  "landscape-left": {
-    layoutClass: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-1 md:mt-12 xl:mt-16",
-    indexLabel: "09",
+  {
+    small: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-1 md:mt-12 xl:mt-16",
+    medium: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-1 md:mt-12 xl:mt-16",
+    large: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-1 md:mt-12 xl:mt-16",
+    hero: "col-span-12 md:col-span-8 xl:col-span-7 xl:col-start-1 md:mt-12 xl:mt-16",
   },
-  "landscape-right-low": {
-    layoutClass: "col-span-12 md:col-span-6 xl:col-span-4 xl:col-start-8 md:mt-28 xl:mt-32",
-    indexLabel: "10",
+  {
+    small: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-8 md:mt-28 xl:mt-32",
+    medium: "col-span-12 md:col-span-6 xl:col-span-4 xl:col-start-8 md:mt-28 xl:mt-32",
+    large: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-7 md:mt-28 xl:mt-32",
+    hero: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-7 md:mt-28 xl:mt-32",
   },
-};
+];
 
-const frameMap: Record<ProjectEntry["display"]["frame"], string> = {
+const frameMap: Record<ProjectEntry["display"]["orientation"], string> = {
   portrait: "aspect-[4/5] md:aspect-[4/5]",
   landscape: "aspect-[5/4] md:aspect-[5/4]",
   wide: "aspect-[16/10] md:aspect-[16/10]",
-  hero: "aspect-[4/3] md:aspect-[4/3]",
 };
 ---
 
@@ -84,20 +92,20 @@ const frameMap: Record<ProjectEntry["display"]["frame"], string> = {
   <div class="mx-auto max-w-[96rem]">
     <div class="grid gap-8 border-t border-black/8 pt-10 md:grid-cols-12 md:gap-x-8 md:gap-y-20 lg:pt-12 xl:gap-x-10 xl:gap-y-24">
       {
-        projects.map((project) => {
-          const slot = slotMap[project.display.slot];
-          const frameClass = frameMap[project.display.frame];
+        projects.map((project, index) => {
+          const placement = placementPattern[index % placementPattern.length];
+          const layoutClass = placement[project.display.size];
+          const frameClass = frameMap[project.display.orientation];
 
           return (
             <ProjectCard
               title={project.title}
               image={project.image}
               descriptor={project.descriptor}
-              indexLabel={slot.indexLabel}
-              layoutClass={slot.layoutClass}
+              indexLabel={String(index + 1).padStart(2, "0")}
+              layoutClass={layoutClass}
               frameClass={frameClass}
-              objectPosition={project.display.objectPosition}
-              objectFit={project.display.objectFit}
+              cropFocus={project.display.cropFocus}
             />
           );
         })

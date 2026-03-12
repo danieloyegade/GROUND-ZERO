@@ -4,10 +4,9 @@ slug: "project-2"
 image: "/images/project-2.jpg"
 descriptor: "Short descriptor for project 2."
 display:
-  frame: "portrait"
-  slot: "portrait-right-high"
-  objectPosition: "50% 26%"
-  objectFit: "cover"
+  orientation: "portrait"
+  cropFocus: "top"
+  size: "medium"
 status: "placeholder"
 ---
 

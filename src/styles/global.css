@@ -35,10 +35,10 @@
 :root {
   --font-sans: "Satoshi", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-serif: "Cormorant Garamond", "Iowan Old Style", "Times New Roman", serif;
-  --page-background: #f5f1e8;
+  --page-background: #ffffff;
   --page-foreground: #161412;
-  --muted-foreground: #5f584f;
-  --subtle-foreground: #857d73;
+  --muted-foreground: #403a34;
+  --subtle-foreground: #756d66;
 }
 
 html {
