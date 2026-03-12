@@ -3,17 +3,23 @@
 :root {
   --font-sans: "Satoshi", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-serif: "Cormorant Garamond", "Iowan Old Style", "Times New Roman", serif;
-  --page-background: #11110f;
-  --page-foreground: #f5f1e8;
+  --page-background: #f5f1e8;
+  --page-foreground: #161412;
+  --muted-foreground: #5f584f;
+  --subtle-foreground: #857d73;
 }
 
 html {
   background: var(--page-background);
   color: var(--page-foreground);
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-sans);
+  min-height: 100vh;
+  letter-spacing: -0.01em;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -21,12 +27,23 @@ h2,
 h3,
 .font-serif {
   font-family: var(--font-serif);
+  font-weight: 500;
+}
+
+::selection {
+  background: rgba(22, 20, 18, 0.12);
+}
+
+main {
+  padding-top: 4.5rem;
 }
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 img {
   display: block;
+  max-width: 100%;
 }
