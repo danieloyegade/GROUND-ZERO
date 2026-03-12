@@ -1,0 +1,42 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "GROUND ZERO is a minimal editorial portfolio built with Astro.",
+} = Astro.props;
+
+const canonicalPath = Astro.url.pathname.endsWith("/")
+  ? Astro.url.pathname
+  : `${Astro.url.pathname}/`;
+const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-stone-950 text-stone-100 antialiased">
+    <div class="min-h-screen">
+      <header class="fixed inset-x-0 top-0 z-20">
+        <nav class="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-5 text-[0.72rem] uppercase tracking-[0.28em] text-stone-200/90 sm:px-8">
+          <a href="/" class="transition-colors hover:text-white">GROUND ZERO</a>
+          <a href="/information" class="transition-colors hover:text-white">Information</a>
+        </nav>
+      </header>
+      <main>
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

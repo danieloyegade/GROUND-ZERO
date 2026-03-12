@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: "Satoshi", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: "Cormorant Garamond", "Iowan Old Style", "Times New Roman", serif;
+  --page-background: #11110f;
+  --page-foreground: #f5f1e8;
+}
+
+html {
+  background: var(--page-background);
+  color: var(--page-foreground);
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  display: block;
+}
