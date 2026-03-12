@@ -46,7 +46,7 @@ const projects = (await getCollection("projects")).sort((a, b) => a.slug.localeC
       title: project.data.title,
       image: project.data.image,
       descriptor: project.data.descriptor,
-      slug: project.slug,
+      slug: project.id.replace(/\.md$/, ""),
     }))}
   />
 </BaseLayout>

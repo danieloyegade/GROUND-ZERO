@@ -13,14 +13,15 @@ const { title, image, descriptor, indexLabel, layoutClass, aspectClass } = Astro
 
 <article class:list={["project-card", layoutClass]}>
   <div class:list={["project-card__image-wrap", aspectClass]}>
+    <div class="project-card__overlay"></div>
     <img src={image} alt={title} class="project-card__image" loading="lazy" decoding="async" />
+    <div class="project-card__hover-copy">
+      <h2 class="project-card__hover-title">{title}</h2>
+      <p class="project-card__hover-descriptor">{descriptor}</p>
+    </div>
   </div>
   <div class="project-card__meta">
     <p class="project-card__index">{indexLabel}</p>
-    <div class="project-card__copy">
-      <h2 class="project-card__title">{title}</h2>
-      <p class="project-card__descriptor">{descriptor}</p>
-    </div>
   </div>
 </article>
 
@@ -33,6 +34,7 @@ const { title, image, descriptor, indexLabel, layoutClass, aspectClass } = Astro
   }
 
   .project-card__image-wrap {
+    position: relative;
     overflow: hidden;
     background: rgba(22, 20, 18, 0.06);
   }
@@ -41,12 +43,56 @@ const { title, image, descriptor, indexLabel, layoutClass, aspectClass } = Astro
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 320ms ease-out, filter 320ms ease-out;
+  }
+
+  .project-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(13, 12, 11, 0.34), rgba(13, 12, 11, 0));
+    opacity: 0;
+    transition: opacity 320ms ease-out;
+    pointer-events: none;
+  }
+
+  .project-card__hover-copy {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1.15rem;
+    left: 1.25rem;
+    z-index: 1;
+    opacity: 0;
+    transform: translate3d(0, 0.45rem, 0);
+    transition: opacity 260ms ease-out, transform 260ms ease-out;
+    pointer-events: none;
+  }
+
+  .project-card__hover-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+    color: rgba(247, 243, 235, 0.98);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .project-card__hover-descriptor {
+    margin: 0.45rem 0 0;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1.45;
+    color: rgba(247, 243, 235, 0.88);
+    text-transform: none;
   }
 
   .project-card__meta {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 1rem;
   }
 
@@ -60,35 +106,37 @@ const { title, image, descriptor, indexLabel, layoutClass, aspectClass } = Astro
     white-space: nowrap;
   }
 
-  .project-card__copy {
-    max-width: 24rem;
-    margin-left: auto;
+  .project-card:hover .project-card__image,
+  .project-card:focus-within .project-card__image {
+    filter: brightness(0.94);
+    transform: scale(1.008);
   }
 
-  .project-card__title {
-    margin: 0;
-    font-family: var(--font-sans);
-    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1.08;
+  .project-card:hover .project-card__overlay,
+  .project-card:focus-within .project-card__overlay {
+    opacity: 1;
   }
 
-  .project-card__descriptor {
-    margin: 0.45rem 0 0;
-    font-size: 0.92rem;
-    line-height: 1.6;
-    color: var(--muted-foreground);
+  .project-card:hover .project-card__hover-copy,
+  .project-card:focus-within .project-card__hover-copy {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 
   @media (max-width: 48rem) {
     .project-card__meta {
-      flex-direction: column;
-      gap: 0.5rem;
+      justify-content: flex-start;
+    }
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .project-card__overlay {
+      opacity: 1;
     }
 
-    .project-card__copy {
-      margin-left: 0;
+    .project-card__hover-copy {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 </style>
