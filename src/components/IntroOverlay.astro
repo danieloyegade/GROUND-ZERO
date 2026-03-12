@@ -1,17 +1,17 @@
 ---
 const floorLabels = [
-  { text: "EIGHTH FLOOR", top: "18%" },
-  { text: "FOURTH FLOOR", top: "31%" },
-  { text: "FIRST FLOOR", top: "45%" },
-  { text: "GROUND FLOOR", top: "60%" },
-  { text: "GROUND ZERO", top: "74%" },
+  { text: "EIGHTH FLOOR", style: "top: 16%; left: clamp(1.5rem, 4vw, 4rem);" },
+  { text: "FOURTH FLOOR", style: "top: 31%; left: clamp(3rem, 12vw, 12rem);" },
+  { text: "FIRST FLOOR", style: "top: 47%; left: clamp(5rem, 24vw, 22rem);" },
+  { text: "GROUND FLOOR", style: "top: 65%; left: clamp(7rem, 40vw, 36rem);" },
+  { text: "GROUND ZERO", style: "right: clamp(1.5rem, 4vw, 4rem); bottom: 10%;" },
 ];
 ---
 
 <div
   class="intro-overlay"
   aria-hidden="true"
-  style="--label-duration: 420ms; --label-gap: 120ms; --hold-duration: 900ms; --swipe-duration: 900ms;"
+  style="--label-step: 1500ms; --label-duration: 1500ms; --final-duration: 2900ms; --swipe-duration: 1100ms;"
 >
   <div class="intro-overlay__image-wrap">
     <img
@@ -29,7 +29,7 @@ const floorLabels = [
       floorLabels.map((label, index) => (
         <p
           class={`intro-overlay__label ${index === floorLabels.length - 1 ? "is-final" : ""}`}
-          style={`--label-index: ${index}; --label-top: ${label.top};`}
+          style={`--label-index: ${index}; ${label.style}`}
         >
           {label.text}
         </p>
@@ -40,13 +40,12 @@ const floorLabels = [
 
 <style>
   .intro-overlay {
-    --sequence-step: calc(var(--label-duration) + var(--label-gap));
-    --pre-swipe-duration: calc((var(--sequence-step) * 4) + var(--hold-duration));
+    --pre-swipe-duration: calc((var(--label-step) * 4) + var(--final-duration));
     position: fixed;
     inset: 0;
     z-index: 40;
     overflow: hidden;
-    animation: intro-plane-swipe var(--swipe-duration) cubic-bezier(0.58, 0.04, 0.22, 0.99)
+    animation: intro-plane-swipe var(--swipe-duration) cubic-bezier(0.42, 0, 0.18, 1)
       var(--pre-swipe-duration) forwards;
     will-change: transform, visibility;
   }
@@ -77,53 +76,52 @@ const floorLabels = [
 
   .intro-overlay__label {
     position: absolute;
-    top: var(--label-top);
-    left: clamp(1.5rem, 4vw, 4rem);
     margin: 0;
     font-family: var(--font-sans);
-    font-size: clamp(1.25rem, 2.8vw, 2.75rem);
+    font-size: clamp(1.15rem, 2.4vw, 2.35rem);
     font-weight: 500;
-    letter-spacing: 0.16em;
-    line-height: 0.95;
+    letter-spacing: 0.15em;
+    line-height: 0.98;
     text-transform: uppercase;
     color: rgba(247, 243, 235, 0.96);
     opacity: 0;
-    transform: translate3d(0, -1.25rem, 0);
-    animation: intro-label var(--label-duration) ease-out
-      calc(var(--label-index) * var(--sequence-step)) forwards;
+    transform: translate3d(0, -1rem, 0);
+    animation: intro-label var(--label-duration) cubic-bezier(0.32, 0, 0.18, 1)
+      calc(var(--label-index) * var(--label-step)) forwards;
   }
 
   .intro-overlay__label.is-final {
-    animation:
-      intro-label var(--label-duration) ease-out calc(var(--label-index) * var(--sequence-step)) forwards,
-      intro-final-hold var(--hold-duration) linear var(--pre-swipe-duration) forwards;
+    text-align: right;
+    animation: intro-final-label var(--final-duration) cubic-bezier(0.32, 0, 0.18, 1)
+      calc(var(--label-index) * var(--label-step)) forwards;
   }
 
   @keyframes intro-label {
     0% {
       opacity: 0;
-      transform: translate3d(0, -1.25rem, 0);
+      transform: translate3d(0, -1rem, 0);
     }
 
-    24%,
-    72% {
+    18%,
+    74% {
       opacity: 1;
       transform: translate3d(0, 0, 0);
     }
 
     100% {
       opacity: 0;
-      transform: translate3d(0, 0.9rem, 0);
+      transform: translate3d(0, 0.7rem, 0);
     }
   }
 
-  @keyframes intro-final-hold {
-    from {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
+  @keyframes intro-final-label {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -1rem, 0);
     }
 
-    to {
+    16%,
+    100% {
       opacity: 1;
       transform: translate3d(0, 0, 0);
     }
@@ -136,12 +134,12 @@ const floorLabels = [
     }
 
     99% {
-      transform: translate3d(0, -100%, 0);
+      transform: translate3d(0, -100vh, 0);
       visibility: visible;
     }
 
     100% {
-      transform: translate3d(0, -100%, 0);
+      transform: translate3d(0, -100vh, 0);
       visibility: hidden;
       pointer-events: none;
     }
