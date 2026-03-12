@@ -1,0 +1,168 @@
+---
+const floorLabels = [
+  { text: "EIGHTH FLOOR", top: "18%" },
+  { text: "FOURTH FLOOR", top: "31%" },
+  { text: "FIRST FLOOR", top: "45%" },
+  { text: "GROUND FLOOR", top: "60%" },
+  { text: "GROUND ZERO", top: "74%" },
+];
+---
+
+<div
+  class="intro-overlay"
+  aria-hidden="true"
+  style="--label-duration: 420ms; --label-gap: 120ms; --hold-duration: 900ms; --swipe-duration: 900ms;"
+>
+  <div class="intro-overlay__image-wrap">
+    <img
+      src="/images/intro-image.jpg"
+      alt=""
+      class="intro-overlay__image"
+      loading="eager"
+      decoding="async"
+    />
+    <div class="intro-overlay__scrim"></div>
+  </div>
+
+  <div class="intro-overlay__labels">
+    {
+      floorLabels.map((label, index) => (
+        <p
+          class={`intro-overlay__label ${index === floorLabels.length - 1 ? "is-final" : ""}`}
+          style={`--label-index: ${index}; --label-top: ${label.top};`}
+        >
+          {label.text}
+        </p>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .intro-overlay {
+    --sequence-step: calc(var(--label-duration) + var(--label-gap));
+    --pre-swipe-duration: calc((var(--sequence-step) * 4) + var(--hold-duration));
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    overflow: hidden;
+    animation: intro-plane-swipe var(--swipe-duration) cubic-bezier(0.58, 0.04, 0.22, 0.99)
+      var(--pre-swipe-duration) forwards;
+    will-change: transform, visibility;
+  }
+
+  .intro-overlay__image-wrap,
+  .intro-overlay__image,
+  .intro-overlay__scrim,
+  .intro-overlay__labels {
+    position: absolute;
+    inset: 0;
+  }
+
+  .intro-overlay__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .intro-overlay__scrim {
+    background:
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.32), rgba(10, 10, 10, 0.2)),
+      linear-gradient(to right, rgba(10, 10, 10, 0.12), rgba(10, 10, 10, 0));
+  }
+
+  .intro-overlay__labels {
+    padding: clamp(1.5rem, 3vw, 3rem);
+  }
+
+  .intro-overlay__label {
+    position: absolute;
+    top: var(--label-top);
+    left: clamp(1.5rem, 4vw, 4rem);
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: clamp(1.25rem, 2.8vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    line-height: 0.95;
+    text-transform: uppercase;
+    color: rgba(247, 243, 235, 0.96);
+    opacity: 0;
+    transform: translate3d(0, -1.25rem, 0);
+    animation: intro-label var(--label-duration) ease-out
+      calc(var(--label-index) * var(--sequence-step)) forwards;
+  }
+
+  .intro-overlay__label.is-final {
+    animation:
+      intro-label var(--label-duration) ease-out calc(var(--label-index) * var(--sequence-step)) forwards,
+      intro-final-hold var(--hold-duration) linear var(--pre-swipe-duration) forwards;
+  }
+
+  @keyframes intro-label {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -1.25rem, 0);
+    }
+
+    24%,
+    72% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translate3d(0, 0.9rem, 0);
+    }
+  }
+
+  @keyframes intro-final-hold {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes intro-plane-swipe {
+    0% {
+      transform: translate3d(0, 0, 0);
+      visibility: visible;
+    }
+
+    99% {
+      transform: translate3d(0, -100%, 0);
+      visibility: visible;
+    }
+
+    100% {
+      transform: translate3d(0, -100%, 0);
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .intro-overlay__label {
+      letter-spacing: 0.14em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro-overlay {
+      animation: none;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-overlay__label {
+      animation: none;
+      opacity: 0;
+    }
+  }
+</style>
