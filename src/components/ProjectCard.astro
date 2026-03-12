@@ -1,0 +1,94 @@
+---
+interface Props {
+  title: string;
+  image: string;
+  descriptor: string;
+  indexLabel: string;
+  layoutClass: string;
+  aspectClass: string;
+}
+
+const { title, image, descriptor, indexLabel, layoutClass, aspectClass } = Astro.props;
+---
+
+<article class:list={["project-card", layoutClass]}>
+  <div class:list={["project-card__image-wrap", aspectClass]}>
+    <img src={image} alt={title} class="project-card__image" loading="lazy" decoding="async" />
+  </div>
+  <div class="project-card__meta">
+    <p class="project-card__index">{indexLabel}</p>
+    <div class="project-card__copy">
+      <h2 class="project-card__title">{title}</h2>
+      <p class="project-card__descriptor">{descriptor}</p>
+    </div>
+  </div>
+</article>
+
+<style>
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .project-card__image-wrap {
+    overflow: hidden;
+    background: rgba(22, 20, 18, 0.06);
+  }
+
+  .project-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-card__meta {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .project-card__index {
+    margin: 0;
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--subtle-foreground);
+    white-space: nowrap;
+  }
+
+  .project-card__copy {
+    max-width: 24rem;
+    margin-left: auto;
+  }
+
+  .project-card__title {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+  }
+
+  .project-card__descriptor {
+    margin: 0.45rem 0 0;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--muted-foreground);
+  }
+
+  @media (max-width: 48rem) {
+    .project-card__meta {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .project-card__copy {
+      margin-left: 0;
+    }
+  }
+</style>

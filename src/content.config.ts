@@ -5,6 +5,7 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     image: z.string(),
+    descriptor: z.string(),
     status: z.string().default("placeholder"),
   }),
 });

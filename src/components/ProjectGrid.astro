@@ -1,0 +1,92 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+
+interface ProjectEntry {
+  title: string;
+  image: string;
+  descriptor: string;
+  slug: string;
+}
+
+interface Props {
+  projects: ProjectEntry[];
+}
+
+const { projects } = Astro.props;
+
+const layoutMap: Record<string, { layoutClass: string; aspectClass: string; indexLabel: string }> = {
+  "project-1": {
+    layoutClass: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-1",
+    aspectClass: "aspect-[4/5]",
+    indexLabel: "01",
+  },
+  "project-2": {
+    layoutClass: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-9 md:mt-20 xl:mt-24",
+    aspectClass: "aspect-[5/4]",
+    indexLabel: "02",
+  },
+  "project-3": {
+    layoutClass: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-3 md:mt-8 xl:mt-10",
+    aspectClass: "aspect-[3/4]",
+    indexLabel: "03",
+  },
+  "project-4": {
+    layoutClass: "col-span-12 md:col-span-6 xl:col-span-4 xl:col-start-9 xl:-mt-12",
+    aspectClass: "aspect-[6/4]",
+    indexLabel: "04",
+  },
+  "project-5": {
+    layoutClass: "col-span-12 md:col-span-8 xl:col-span-7 xl:col-start-1 md:mt-10 xl:mt-14",
+    aspectClass: "aspect-[16/10]",
+    indexLabel: "05",
+  },
+  "project-6": {
+    layoutClass: "col-span-12 md:col-span-4 xl:col-span-3 xl:col-start-10 md:mt-24 xl:mt-28",
+    aspectClass: "aspect-[3/4]",
+    indexLabel: "06",
+  },
+  "project-7": {
+    layoutClass: "col-span-12 md:col-span-5 xl:col-span-4 xl:col-start-2 md:mt-6 xl:mt-8",
+    aspectClass: "aspect-[4/5]",
+    indexLabel: "07",
+  },
+  "project-8": {
+    layoutClass: "col-span-12 md:col-span-7 xl:col-span-6 xl:col-start-7 md:mt-16 xl:mt-20",
+    aspectClass: "aspect-[5/3]",
+    indexLabel: "08",
+  },
+  "project-9": {
+    layoutClass: "col-span-12 md:col-span-6 xl:col-span-5 xl:col-start-1 md:mt-12 xl:mt-16",
+    aspectClass: "aspect-[4/5]",
+    indexLabel: "09",
+  },
+  "project-10": {
+    layoutClass: "col-span-12 md:col-span-6 xl:col-span-4 xl:col-start-8 md:mt-28 xl:mt-32",
+    aspectClass: "aspect-[3/4]",
+    indexLabel: "10",
+  },
+};
+---
+
+<section class="px-6 pb-28 pt-8 sm:px-10 sm:pb-36 lg:px-14">
+  <div class="mx-auto max-w-[96rem]">
+    <div class="grid gap-8 border-t border-black/8 pt-10 md:grid-cols-12 md:gap-x-8 md:gap-y-20 lg:pt-12 xl:gap-x-10 xl:gap-y-24">
+      {
+        projects.map((project) => {
+          const layout = layoutMap[project.slug];
+
+          return (
+            <ProjectCard
+              title={project.title}
+              image={project.image}
+              descriptor={project.descriptor}
+              indexLabel={layout.indexLabel}
+              layoutClass={layout.layoutClass}
+              aspectClass={layout.aspectClass}
+            />
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

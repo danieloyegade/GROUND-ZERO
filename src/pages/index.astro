@@ -1,6 +1,10 @@
 ---
+import { getCollection } from "astro:content";
 import IntroOverlay from "../components/IntroOverlay.astro";
+import ProjectGrid from "../components/ProjectGrid.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const projects = (await getCollection("projects")).sort((a, b) => a.slug.localeCompare(b.slug));
 ---
 
 <BaseLayout
@@ -36,4 +40,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </div>
     </div>
   </section>
+
+  <ProjectGrid
+    projects={projects.map((project) => ({
+      title: project.data.title,
+      image: project.data.image,
+      descriptor: project.data.descriptor,
+      slug: project.slug,
+    }))}
+  />
 </BaseLayout>
