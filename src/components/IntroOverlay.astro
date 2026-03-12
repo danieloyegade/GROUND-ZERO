@@ -1,17 +1,37 @@
 ---
 const floorLabels = [
-  { text: "EIGHTH FLOOR", style: "top: 16%; left: clamp(1.5rem, 4vw, 4rem);" },
-  { text: "FOURTH FLOOR", style: "top: 31%; left: clamp(3rem, 12vw, 12rem);" },
-  { text: "FIRST FLOOR", style: "top: 47%; left: clamp(5rem, 24vw, 22rem);" },
-  { text: "GROUND FLOOR", style: "top: 65%; left: clamp(7rem, 40vw, 36rem);" },
-  { text: "GROUND ZERO", style: "right: clamp(1.5rem, 4vw, 4rem); bottom: 10%;" },
+  {
+    text: "EIGHTH FLOOR",
+    style:
+      "top: 13%; right: clamp(1.5rem, 4vw, 4rem); --label-delay: 0ms; --label-duration: 1000ms;",
+  },
+  {
+    text: "FOURTH FLOOR",
+    style:
+      "top: 28%; right: clamp(1.5rem, 4vw, 4rem); --label-delay: 1000ms; --label-duration: 900ms;",
+  },
+  {
+    text: "FIRST FLOOR",
+    style:
+      "top: 44%; right: clamp(1.5rem, 4vw, 4rem); --label-delay: 1900ms; --label-duration: 900ms;",
+  },
+  {
+    text: "GROUND FLOOR",
+    style:
+      "top: 60%; right: clamp(1.5rem, 4vw, 4rem); --label-delay: 2800ms; --label-duration: 900ms;",
+  },
+  {
+    text: "GROUND ZERO",
+    style:
+      "right: clamp(1.5rem, 4vw, 4rem); bottom: 10%; --label-delay: 3700ms; --label-duration: 2000ms;",
+  },
 ];
 ---
 
 <div
   class="intro-overlay"
   aria-hidden="true"
-  style="--label-step: 520ms; --label-duration: 520ms; --final-duration: 1200ms; --swipe-duration: 780ms;"
+  style="--pre-swipe-duration: 5700ms; --swipe-duration: 800ms;"
 >
   <div class="intro-overlay__image-wrap">
     <img
@@ -29,7 +49,7 @@ const floorLabels = [
       floorLabels.map((label, index) => (
         <p
           class={`intro-overlay__label ${index === floorLabels.length - 1 ? "is-final" : ""}`}
-          style={`--label-index: ${index}; ${label.style}`}
+          style={label.style}
         >
           {label.text}
         </p>
@@ -40,7 +60,6 @@ const floorLabels = [
 
 <style>
   .intro-overlay {
-    --pre-swipe-duration: calc((var(--label-step) * 4) + var(--final-duration));
     position: fixed;
     inset: 0;
     z-index: 40;
@@ -76,51 +95,53 @@ const floorLabels = [
 
   .intro-overlay__label {
     position: absolute;
+    width: min(20rem, calc(100vw - 3rem));
     margin: 0;
     font-family: var(--font-sans);
     font-size: clamp(1.15rem, 2.4vw, 2.35rem);
     font-weight: 500;
     letter-spacing: 0.15em;
     line-height: 0.98;
+    text-align: right;
     text-transform: uppercase;
     color: rgba(247, 243, 235, 0.96);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.14), 0 3px 12px rgba(0, 0, 0, 0.18);
     opacity: 0;
-    transform: translate3d(0, -1rem, 0);
+    transform: translate3d(0, -0.8rem, 0);
     animation: intro-label var(--label-duration) cubic-bezier(0.32, 0, 0.18, 1)
-      calc(var(--label-index) * var(--label-step)) forwards;
+      var(--label-delay) forwards;
   }
 
   .intro-overlay__label.is-final {
-    text-align: right;
-    animation: intro-final-label var(--final-duration) cubic-bezier(0.32, 0, 0.18, 1)
-      calc(var(--label-index) * var(--label-step)) forwards;
+    animation: intro-final-label var(--label-duration) cubic-bezier(0.32, 0, 0.18, 1)
+      var(--label-delay) forwards;
   }
 
   @keyframes intro-label {
     0% {
       opacity: 0;
-      transform: translate3d(0, -1rem, 0);
+      transform: translate3d(0, -0.8rem, 0);
     }
 
-    18%,
-    74% {
+    22%,
+    78% {
       opacity: 1;
       transform: translate3d(0, 0, 0);
     }
 
     100% {
       opacity: 0;
-      transform: translate3d(0, 0.7rem, 0);
+      transform: translate3d(0, 0.55rem, 0);
     }
   }
 
   @keyframes intro-final-label {
     0% {
       opacity: 0;
-      transform: translate3d(0, -1rem, 0);
+      transform: translate3d(0, -0.8rem, 0);
     }
 
-    16%,
+    18%,
     100% {
       opacity: 1;
       transform: translate3d(0, 0, 0);
@@ -148,6 +169,7 @@ const floorLabels = [
   @media (max-width: 40rem) {
     .intro-overlay__label {
       letter-spacing: 0.14em;
+      width: min(16rem, calc(100vw - 2.5rem));
     }
   }
 

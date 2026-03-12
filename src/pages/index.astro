@@ -4,7 +4,7 @@ import IntroOverlay from "../components/IntroOverlay.astro";
 import ProjectGrid from "../components/ProjectGrid.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const projects = (await getCollection("projects")).sort((a, b) => a.slug.localeCompare(b.slug));
+const projects = (await getCollection("projects")).sort((a, b) => a.id.localeCompare(b.id));
 ---
 
 <BaseLayout
@@ -18,7 +18,7 @@ const projects = (await getCollection("projects")).sort((a, b) => a.slug.localeC
       title: project.data.title,
       image: project.data.image,
       descriptor: project.data.descriptor,
-      slug: project.id.replace(/\.md$/, ""),
+      display: project.data.display,
     }))}
   />
 </BaseLayout>

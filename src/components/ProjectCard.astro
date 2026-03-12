@@ -5,16 +5,34 @@ interface Props {
   descriptor: string;
   indexLabel: string;
   layoutClass: string;
-  aspectClass: string;
+  frameClass: string;
+  objectPosition?: string;
+  objectFit?: "cover" | "contain";
 }
 
-const { title, image, descriptor, indexLabel, layoutClass, aspectClass } = Astro.props;
+const {
+  title,
+  image,
+  descriptor,
+  indexLabel,
+  layoutClass,
+  frameClass,
+  objectPosition = "center center",
+  objectFit = "cover",
+} = Astro.props;
 ---
 
 <article class:list={["project-card", layoutClass]}>
-  <div class:list={["project-card__image-wrap", aspectClass]}>
+  <div class:list={["project-card__image-wrap", frameClass]}>
     <div class="project-card__overlay"></div>
-    <img src={image} alt={title} class="project-card__image" loading="lazy" decoding="async" />
+    <img
+      src={image}
+      alt={title}
+      class="project-card__image"
+      style={`object-position: ${objectPosition}; object-fit: ${objectFit};`}
+      loading="lazy"
+      decoding="async"
+    />
     <div class="project-card__hover-copy">
       <h2 class="project-card__hover-title">{title}</h2>
       <p class="project-card__hover-descriptor">{descriptor}</p>
@@ -42,7 +60,6 @@ const { title, image, descriptor, indexLabel, layoutClass, aspectClass } = Astro
   .project-card__image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     transition: transform 320ms ease-out, filter 320ms ease-out;
   }
 
