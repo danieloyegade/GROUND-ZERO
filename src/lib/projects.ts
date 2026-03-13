@@ -2,6 +2,12 @@ import type { CollectionEntry } from "astro:content";
 
 export type ProjectEntry = CollectionEntry<"projects">;
 
+export interface ProjectSequenceLink {
+  slug: string;
+  title: string;
+  href: string;
+}
+
 export const sortProjectsByOrder = (projects: ProjectEntry[]) =>
   [...projects].sort((a, b) => a.data.order - b.data.order);
 
@@ -19,3 +25,77 @@ export const mapProjectForGrid = (project: ProjectEntry) => ({
   cropFocus: project.data.cropFocus,
   detailImages: project.data.detailImages,
 });
+
+const cleanInfoLine = (value: string) => value.trim().replace(/\.$/, "");
+
+export const getProjectInfoLines = (project: ProjectEntry) => {
+  const metadataLines = project.data.metadata?.map(cleanInfoLine).filter(Boolean);
+
+  if (metadataLines && metadataLines.length > 0) {
+    return metadataLines;
+  }
+
+  const creditLines = project.data.credits
+    ?.map(({ role, name }) => {
+      const cleanRole = role.trim();
+      const cleanName = name.trim();
+
+      if (!cleanRole || !cleanName) return "";
+
+      return `${cleanRole} by ${cleanName}`;
+    })
+    .map(cleanInfoLine)
+    .filter(Boolean);
+
+  if (creditLines && creditLines.length > 0) {
+    return creditLines;
+  }
+
+  const descriptor = cleanInfoLine(project.data.descriptor);
+
+  if (!descriptor) {
+    return [];
+  }
+
+  if (descriptor.includes(",")) {
+    return descriptor
+      .split(",")
+      .map(cleanInfoLine)
+      .filter(Boolean);
+  }
+
+  if (descriptor.includes(". ")) {
+    return descriptor
+      .split(". ")
+      .map(cleanInfoLine)
+      .filter(Boolean);
+  }
+
+  return [descriptor];
+};
+
+export const getProjectSequence = (projects: ProjectEntry[], slug: string) => {
+  const orderedProjects = sortProjectsByOrder(projects);
+  const currentIndex = orderedProjects.findIndex((project) => project.slug === slug);
+
+  if (currentIndex === -1) {
+    throw new Error(`Project sequence could not find slug "${slug}".`);
+  }
+
+  const previousProject =
+    orderedProjects[(currentIndex - 1 + orderedProjects.length) % orderedProjects.length];
+  const nextProject = orderedProjects[(currentIndex + 1) % orderedProjects.length];
+
+  return {
+    previousProject: {
+      slug: previousProject.slug,
+      title: previousProject.data.title,
+      href: projectPath(previousProject.slug),
+    },
+    nextProject: {
+      slug: nextProject.slug,
+      title: nextProject.data.title,
+      href: projectPath(nextProject.slug),
+    },
+  };
+};

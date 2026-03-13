@@ -18,6 +18,7 @@ const projects = defineCollection({
     orientation: z.enum(projectOrientationValues),
     cropFocus: z.enum(projectCropFocusValues).default("center"),
     detailImages: z.array(z.string()).optional(),
+    metadata: z.array(z.string()).optional(),
     credits: z
       .array(
         z.object({
