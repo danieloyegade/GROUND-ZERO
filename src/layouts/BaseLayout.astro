@@ -31,7 +31,12 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     {preloadImage && <link rel="preload" as="image" href={preloadImage} />}
     <title>{title}</title>
   </head>
@@ -92,7 +97,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
     max-width: var(--page-max-width);
     margin: 0 auto;
     min-height: var(--header-clearance);
-    padding: 0.94rem var(--page-inline-padding) 0.66rem;
+    padding: 1.42rem var(--page-inline-padding) 0.76rem;
     pointer-events: auto;
   }
 
@@ -103,17 +108,23 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
     width: fit-content;
     color: #ffffff;
     font-family: var(--font-sans);
-    font-size: clamp(0.8rem, 0.69rem + 0.24vw, 1.1rem);
+    font-size: clamp(0.96rem, 0.82rem + 0.28vw, 1.32rem);
     font-weight: 700;
     font-synthesis: weight;
-    letter-spacing: 0.102em;
-    line-height: 0.9;
+    font-stretch: 108%;
+    letter-spacing: 0.114em;
+    line-height: 0.92;
     text-transform: uppercase;
     white-space: nowrap;
     font-kerning: none;
     font-variant-ligatures: none;
     text-rendering: geometricPrecision;
-    transition: opacity 160ms ease-out;
+    text-decoration-color: currentColor;
+    text-decoration-line: none;
+    text-decoration-skip-ink: none;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.28em;
+    transition: opacity 160ms ease-out, text-decoration-color 160ms ease-out;
     opacity: 0.74;
   }
 
@@ -124,6 +135,10 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
   .site-header__link--brand,
   .site-header__link.is-active {
     opacity: 0.98;
+  }
+
+  .site-header__link.is-active {
+    text-decoration-line: underline;
   }
 
   .site-header__link--brand {
@@ -145,13 +160,13 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
   @media (max-width: 40rem) {
     .site-header__nav {
       gap: 0.5rem;
-      padding-top: 0.84rem;
-      padding-bottom: 0.66rem;
+      padding-top: 1.18rem;
+      padding-bottom: 0.74rem;
     }
 
     .site-header__link {
-      font-size: 0.74rem;
-      letter-spacing: 0.084em;
+      font-size: 0.89rem;
+      letter-spacing: 0.096em;
     }
   }
 </style>
