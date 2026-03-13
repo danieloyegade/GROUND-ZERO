@@ -1,8 +1,8 @@
 ---
-title: "Project 4"
-slug: "project-4"
+title: "Mia"
+slug: "Mia"
 image: "/images/project-4.jpg"
-descriptor: "Short descriptor for project 4."
+descriptor: "Photographed by Daniel Oyegade."
 display:
   orientation: "landscape"
   cropFocus: "upper-third"

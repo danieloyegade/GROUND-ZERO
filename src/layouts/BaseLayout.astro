@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import PersistentGroundZero from "../components/PersistentGroundZero.astro";
 
 interface Props {
   title: string;
@@ -15,6 +16,7 @@ const {
 const pathname = Astro.url.pathname;
 const isSelectedWorkPage = pathname === "/" || pathname.startsWith("/selected-work");
 const isInformationPage = pathname.startsWith("/information");
+const shouldAnimatePersistentGroundZero = pathname === "/";
 
 const canonicalPath = Astro.url.pathname.endsWith("/")
   ? Astro.url.pathname
@@ -62,6 +64,9 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
           </a>
         </nav>
       </header>
+      {isSelectedWorkPage && (
+        <PersistentGroundZero animateOnReveal={shouldAnimatePersistentGroundZero} />
+      )}
       <main class="site-main">
         <slot />
       </main>
@@ -81,12 +86,12 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
   .site-header__nav {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-items: end;
+    align-items: baseline;
     gap: clamp(0.65rem, 1.6vw, 1.6rem);
     max-width: var(--page-max-width);
     margin: 0 auto;
     min-height: var(--header-clearance);
-    padding: 0.92rem var(--page-inline-padding) 0.72rem;
+    padding: 0.94rem var(--page-inline-padding) 0.66rem;
     pointer-events: auto;
   }
 
@@ -97,27 +102,27 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
     width: fit-content;
     color: #ffffff;
     font-family: var(--font-sans);
-    font-size: clamp(0.79rem, 0.68rem + 0.24vw, 1.13rem);
+    font-size: clamp(0.8rem, 0.69rem + 0.24vw, 1.1rem);
     font-weight: 700;
     font-synthesis: weight;
-    letter-spacing: 0.108em;
-    line-height: 0.94;
+    letter-spacing: 0.102em;
+    line-height: 0.9;
     text-transform: uppercase;
     white-space: nowrap;
     font-kerning: none;
     font-variant-ligatures: none;
     text-rendering: geometricPrecision;
     transition: opacity 160ms ease-out;
-    opacity: 0.7;
+    opacity: 0.74;
   }
 
   .site-header__link:hover {
-    opacity: 0.88;
+    opacity: 0.9;
   }
 
   .site-header__link--brand,
   .site-header__link.is-active {
-    opacity: 0.96;
+    opacity: 0.98;
   }
 
   .site-header__link--brand {
@@ -139,13 +144,13 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
   @media (max-width: 40rem) {
     .site-header__nav {
       gap: 0.5rem;
-      padding-top: 0.82rem;
-      padding-bottom: 0.7rem;
+      padding-top: 0.84rem;
+      padding-bottom: 0.66rem;
     }
 
     .site-header__link {
-      font-size: 0.73rem;
-      letter-spacing: 0.09em;
+      font-size: 0.74rem;
+      letter-spacing: 0.084em;
     }
   }
 </style>

@@ -46,6 +46,18 @@
     var(--page-inline-padding),
     calc((100vw - var(--page-max-width)) / 2 + var(--page-inline-padding))
   );
+  --gz-circle-size: clamp(5.85rem, 9vw, 7.8rem);
+  --gz-circle-stroke-width: 1.2px;
+  --gz-circle-font-size: clamp(1.55rem, 3vw, 2.28rem);
+  --gz-circle-letter-spacing: 0.086em;
+  --gz-circle-bottom: 4.5%;
+  --gz-circle-shadow:
+    0 0.82rem 1.8rem rgba(0, 0, 0, 0.24),
+    0 0.16rem 0.4rem rgba(0, 0, 0, 0.14);
+  --intro-image-settle-delay: 220ms;
+  --intro-ready-pulse-duration: 1920ms;
+  --intro-pre-swipe-duration: 8120ms;
+  --intro-swipe-duration: 800ms;
 }
 
 html {
@@ -81,6 +93,15 @@ a {
 img {
   display: block;
   max-width: 100%;
+}
+
+@media (max-width: 40rem) {
+  :root {
+    --gz-circle-size: clamp(4.85rem, 20vw, 5.8rem);
+    --gz-circle-stroke-width: 1px;
+    --gz-circle-font-size: clamp(1.26rem, 5.6vw, 1.7rem);
+    --gz-circle-letter-spacing: 0.078em;
+  }
 }
 
 @media (min-width: 40rem) {

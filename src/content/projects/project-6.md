@@ -1,8 +1,8 @@
 ---
-title: "Project 6"
-slug: "project-6"
+title: "Abiola"
+slug: "Abiola"
 image: "/images/project-6.jpg"
-descriptor: "Short descriptor for project 6."
+descriptor: "London, 2023."
 display:
   orientation: "portrait"
   cropFocus: "upper-third"

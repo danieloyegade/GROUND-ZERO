@@ -1,8 +1,8 @@
 ---
-title: "Project 3"
-slug: "project-3"
+title: "Someplace Else"
+slug: "Someplace Else"
 image: "/images/project-3.jpg"
-descriptor: "Short descriptor for project 3."
+descriptor: "Directed By Daniel Oyegade"
 display:
   orientation: "wide"
   cropFocus: "center"

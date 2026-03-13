@@ -1,8 +1,8 @@
 ---
-title: "Project 2"
-slug: "project-2"
+title: "Reny"
+slug: "Reny"
 image: "/images/project-2.jpg"
-descriptor: "Short descriptor for project 2."
+descriptor: "Photographed by Daniel Oyegade, Creative Direction by Feya Lanice. Styled by Chaniel Abwola"
 display:
   orientation: "portrait"
   cropFocus: "top"

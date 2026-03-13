@@ -2,23 +2,23 @@
 const floorLabels = [
   {
     code: "8TH",
-    style: "top: 10%; --label-delay: 1200ms; --label-duration: 1160ms;",
+    style: "top: 10%; --label-delay: 2040ms; --label-duration: 1120ms;",
   },
   {
     code: "4TH",
-    style: "top: 25.5%; --label-delay: 2120ms; --label-duration: 1120ms;",
+    style: "top: 25.5%; --label-delay: 2920ms; --label-duration: 1080ms;",
   },
   {
     code: "1ST",
-    style: "top: 41%; --label-delay: 3040ms; --label-duration: 1100ms;",
+    style: "top: 41%; --label-delay: 3800ms; --label-duration: 1060ms;",
   },
   {
     code: "G",
-    style: "top: 56.5%; --label-delay: 3940ms; --label-duration: 1140ms;",
+    style: "top: 56.5%; --label-delay: 4660ms; --label-duration: 1090ms;",
   },
   {
     code: "GZ",
-    style: "bottom: 4.5%; --label-delay: 4860ms; --label-duration: 1880ms;",
+    style: "bottom: 4.5%; --label-delay: 5520ms; --label-duration: 2280ms;",
   },
 ];
 ---
@@ -28,7 +28,6 @@ const floorLabels = [
   data-intro-overlay
   data-ready="false"
   aria-hidden="true"
-  style="--image-settle-delay: 220ms; --pulse-duration: 1080ms; --pre-swipe-duration: 6940ms; --swipe-duration: 800ms;"
 >
   <div class="intro-overlay__image-wrap">
     <img
@@ -94,6 +93,10 @@ const floorLabels = [
 
 <style>
   .intro-overlay {
+    --image-settle-delay: var(--intro-image-settle-delay);
+    --pulse-duration: var(--intro-ready-pulse-duration);
+    --pre-swipe-duration: var(--intro-pre-swipe-duration);
+    --swipe-duration: var(--intro-swipe-duration);
     position: fixed;
     inset: 0;
     z-index: 40;
@@ -128,8 +131,6 @@ const floorLabels = [
 
   .intro-overlay__labels {
     --rail-inline-end: var(--page-inline-offset);
-    --circle-size: clamp(5.85rem, 9vw, 7.8rem);
-    --circle-stroke-width: 1.2px;
     padding: 0;
   }
 
@@ -138,14 +139,14 @@ const floorLabels = [
     right: var(--rail-inline-end);
     display: grid;
     place-items: center;
-    width: var(--circle-size);
-    height: var(--circle-size);
+    width: var(--gz-circle-size);
+    height: var(--gz-circle-size);
     box-sizing: border-box;
     margin: 0;
     font-family: var(--font-sans);
-    font-size: clamp(1.55rem, 3vw, 2.28rem);
+    font-size: var(--gz-circle-font-size);
     font-weight: 500;
-    letter-spacing: 0.086em;
+    letter-spacing: var(--gz-circle-letter-spacing);
     line-height: 1;
     text-align: center;
     text-transform: uppercase;
@@ -154,11 +155,12 @@ const floorLabels = [
     font-kerning: none;
     font-variant-ligatures: none;
     font-variant-numeric: tabular-nums lining-nums;
-    border: var(--circle-stroke-width) solid rgba(247, 243, 235, 0.84);
+    border: var(--gz-circle-stroke-width) solid rgba(247, 243, 235, 0.84);
     border-radius: 999px;
     background: rgba(9, 9, 9, 0.05);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     transform-origin: 100% 50%;
-    will-change: opacity, transform, filter;
+    will-change: opacity, transform, filter, box-shadow;
     opacity: 0;
     filter: blur(0.09rem);
     transform: translate3d(0, -1.1rem, 0);
@@ -189,9 +191,9 @@ const floorLabels = [
 
   .intro-overlay[data-ready="true"] .intro-overlay__label.is-first {
     animation:
-      intro-ready-pulse calc(var(--pulse-duration) / 3) cubic-bezier(0.38, 0.04, 0.24, 1)
-        calc(var(--image-settle-delay) + 120ms) 3 both,
-      intro-label var(--label-duration) cubic-bezier(0.28, 0.02, 0.18, 1)
+      intro-ready-pulse var(--pulse-duration) cubic-bezier(0.34, 0.06, 0.22, 1)
+        calc(var(--image-settle-delay) + 120ms) 1 both,
+      intro-first-label var(--label-duration) cubic-bezier(0.28, 0.02, 0.18, 1)
         calc(var(--image-settle-delay) + var(--label-delay)) forwards;
   }
 
@@ -203,20 +205,77 @@ const floorLabels = [
   @keyframes intro-ready-pulse {
     0% {
       opacity: 0.22;
-      filter: blur(0.035rem);
-      transform: translate3d(0, 0, 0);
+      filter: blur(0.03rem);
+      transform: translate3d(0, 0, 0) scale(0.988);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     }
 
-    46% {
-      opacity: 0.5;
+    18% {
+      opacity: 0.48;
       filter: blur(0.012rem);
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0) scale(1.018);
+    }
+
+    34%,
+    58% {
+      opacity: 0.24;
+      filter: blur(0.024rem);
+      transform: translate3d(0, 0, 0) scale(1);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    78% {
+      opacity: 0.5;
+      filter: blur(0.01rem);
+      transform: translate3d(0, 0, 0) scale(1.018);
     }
 
     100% {
       opacity: 0.24;
+      filter: blur(0.024rem);
+      transform: translate3d(0, 0, 0) scale(1);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+  }
+
+  @keyframes intro-first-label {
+    0% {
+      opacity: 0.24;
+      filter: blur(0.024rem);
+      transform: translate3d(0, 0, 0) scale(1);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    18% {
+      opacity: 0.78;
+      filter: blur(0.012rem);
+      transform: translate3d(0, -0.04rem, 0) scale(1);
+    }
+
+    30%,
+    56% {
+      opacity: 0.94;
+      filter: blur(0);
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    74% {
+      opacity: 0.58;
+      filter: blur(0.012rem);
+      transform: translate3d(0, 0.03rem, 0) scale(1);
+    }
+
+    90% {
+      opacity: 0.18;
       filter: blur(0.028rem);
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0.18rem, 0) scale(1);
+    }
+
+    100% {
+      opacity: 0;
+      filter: blur(0.042rem);
+      transform: translate3d(0, 0.46rem, 0) scale(1);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     }
   }
 
@@ -268,27 +327,56 @@ const floorLabels = [
   @keyframes intro-final-label {
     0% {
       opacity: 0;
-      filter: blur(0.09rem);
-      transform: translate3d(0, -1.18rem, 0);
+      filter: blur(0.08rem);
+      transform: translate3d(0, -1.08rem, 0) scale(0.988);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     }
 
-    10% {
-      opacity: 0.38;
-      filter: blur(0.05rem);
-      transform: translate3d(0, -0.66rem, 0);
+    14% {
+      opacity: 0.36;
+      filter: blur(0.044rem);
+      transform: translate3d(0, -0.56rem, 0) scale(0.994);
     }
 
-    22% {
+    28% {
       opacity: 0.9;
-      filter: blur(0.018rem);
-      transform: translate3d(0, -0.1rem, 0);
+      filter: blur(0.016rem);
+      transform: translate3d(0, -0.06rem, 0) scale(1);
     }
 
-    32%,
+    40% {
+      opacity: 0.96;
+      filter: blur(0);
+      transform: translate3d(0, 0, 0) scale(1);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    54% {
+      opacity: 1;
+      filter: blur(0);
+      transform: translate3d(0, 0, 0) scale(1.028);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    64% {
+      opacity: 0.96;
+      filter: blur(0);
+      transform: translate3d(0, 0, 0) scale(1);
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    78% {
+      opacity: 0.96;
+      filter: blur(0);
+      transform: translate3d(0, 0, 0) scale(1);
+      box-shadow: var(--gz-circle-shadow);
+    }
+
     100% {
       opacity: 0.96;
       filter: blur(0);
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0) scale(1);
+      box-shadow: var(--gz-circle-shadow);
     }
   }
 
@@ -307,18 +395,6 @@ const floorLabels = [
       transform: translate3d(0, -100vh, 0);
       visibility: hidden;
       pointer-events: none;
-    }
-  }
-
-  @media (max-width: 40rem) {
-    .intro-overlay__labels {
-      --circle-size: clamp(4.85rem, 20vw, 5.8rem);
-      --circle-stroke-width: 1px;
-    }
-
-    .intro-overlay__label {
-      font-size: clamp(1.26rem, 5.6vw, 1.7rem);
-      letter-spacing: 0.078em;
     }
   }
 

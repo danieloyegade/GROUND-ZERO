@@ -1,8 +1,8 @@
 ---
-title: "Project 10"
-slug: "project-10"
+title: "Isaac"
+slug: "Isaac"
 image: "/images/project-10.jpg"
-descriptor: "Short descriptor for project 10."
+descriptor: "Manchester, 2025."
 display:
   orientation: "landscape"
   cropFocus: "upper-third"

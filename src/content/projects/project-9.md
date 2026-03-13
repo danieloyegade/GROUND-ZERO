@@ -1,8 +1,8 @@
 ---
-title: "Project 9"
-slug: "project-9"
+title: "DJ Paullette for SEEN MAG"
+slug: "DJ Paullette for SEEN MAG"
 image: "/images/project-9.jpg"
-descriptor: "Short descriptor for project 9."
+descriptor: "Photographed by Daniel Oyegade."
 display:
   orientation: "landscape"
   cropFocus: "upper-third"

@@ -2,7 +2,7 @@
 title: "Moving Images In G# Minor"
 slug: "Moving Images In G# Minor"
 image: "/images/project-1.jpg"
-descriptor: "Short descriptor for project 1."
+descriptor: "Short film directed by Daniel Oyegade."
 display:
   orientation: "landscape"
   cropFocus: "upper-third"

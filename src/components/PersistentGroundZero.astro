@@ -1,49 +1,100 @@
-<div class="persistent-ground-zero" aria-hidden="true">
-  <p class="persistent-ground-zero__label">GROUND ZERO</p>
+---
+interface Props {
+  animateOnReveal?: boolean;
+}
+
+const { animateOnReveal = false } = Astro.props;
+---
+
+<div
+  class:list={[
+    "persistent-ground-zero",
+    animateOnReveal && "is-revealing",
+  ]}
+  aria-hidden="true"
+>
+  <p class="persistent-ground-zero__marker">
+    <span class="persistent-ground-zero__graphic">
+      <span class="persistent-ground-zero__code">GZ</span>
+    </span>
+  </p>
 </div>
 
 <style>
   .persistent-ground-zero {
+    --persistent-gz-size: calc(var(--gz-circle-size) * 0.68);
+    --persistent-gz-stroke-width: calc(var(--gz-circle-stroke-width) * 0.72);
+    --persistent-gz-font-size: calc(var(--gz-circle-font-size) * 0.72);
+    --persistent-gz-letter-spacing: calc(var(--gz-circle-letter-spacing) * 0.84);
+    position: fixed;
+    right: var(--page-inline-offset);
+    bottom: var(--gz-circle-bottom);
+    z-index: 20;
     pointer-events: none;
+    mix-blend-mode: difference;
   }
 
-  .persistent-ground-zero__label {
-    --rail-inline-end: var(--page-inline-offset);
-    --rail-width: clamp(16.5rem, 25vw, 21.5rem);
-    position: fixed;
-    right: var(--rail-inline-end);
-    bottom: clamp(1.75rem, 8vh, 4.75rem);
-    z-index: 10;
-    display: block;
+  .persistent-ground-zero__marker {
+    width: var(--persistent-gz-size);
+    height: var(--persistent-gz-size);
     box-sizing: border-box;
     margin: 0;
-    width: min(var(--rail-width), calc(100vw - (var(--rail-inline-end) * 2)));
-    font-family: var(--font-sans);
-    font-size: clamp(1.56rem, 3.1vw, 3.02rem);
-    font-weight: 500;
-    letter-spacing: 0.152em;
-    line-height: 0.96;
-    text-align: right;
-    text-transform: uppercase;
-    color: rgba(22, 20, 18, 0.48);
-    font-kerning: none;
-    font-variant-ligatures: none;
-    white-space: nowrap;
+    display: block;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    opacity: 0.76;
     transition: opacity 180ms ease-out;
     pointer-events: auto;
     user-select: none;
   }
 
-  .persistent-ground-zero__label:hover {
-    opacity: 0.06;
+  .persistent-ground-zero__graphic {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border: var(--persistent-gz-stroke-width) solid #ffffff;
+    border-radius: 999px;
+    background: transparent;
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-size: var(--persistent-gz-font-size);
+    font-weight: 500;
+    letter-spacing: var(--persistent-gz-letter-spacing);
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+    font-kerning: none;
+    font-variant-ligatures: none;
+    font-variant-numeric: tabular-nums lining-nums;
+    backface-visibility: hidden;
+    transform: translateZ(0);
   }
 
-  @media (max-width: 40rem) {
-    .persistent-ground-zero__label {
-      --rail-width: min(18rem, calc(100vw - 2.5rem));
-      bottom: clamp(1.35rem, 5vh, 2.4rem);
-      font-size: clamp(1.44rem, 7.2vw, 1.9rem);
-      letter-spacing: 0.142em;
+  .persistent-ground-zero__code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    transform: translateY(0.03em);
+  }
+
+  .persistent-ground-zero.is-revealing .persistent-ground-zero__marker {
+    box-shadow: var(--gz-circle-shadow);
+    animation: persistent-gz-settle 900ms cubic-bezier(0.26, 0.08, 0.18, 1)
+      calc(var(--intro-image-settle-delay) + var(--intro-pre-swipe-duration)) forwards;
+  }
+
+  .persistent-ground-zero__marker:hover {
+    opacity: 0.04;
+  }
+
+  @keyframes persistent-gz-settle {
+    0% {
+      box-shadow: var(--gz-circle-shadow);
+    }
+
+    100% {
+      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
     }
   }
 </style>

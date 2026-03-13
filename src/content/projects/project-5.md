@@ -1,8 +1,8 @@
 ---
-title: "Project 5"
-slug: "project-5"
+title: "Annabella"
+slug: "Annabella"
 image: "/images/project-5.jpg"
-descriptor: "Short descriptor for project 5."
+descriptor: "Manchester, 2025."
 display:
   orientation: "portrait"
   cropFocus: "upper-third"
