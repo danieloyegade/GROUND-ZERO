@@ -1,15 +1,17 @@
 ---
 interface Props {
   animateOnReveal?: boolean;
+  fadeOnHover?: boolean;
 }
 
-const { animateOnReveal = false } = Astro.props;
+const { animateOnReveal = false, fadeOnHover = false } = Astro.props;
 ---
 
 <div
   class:list={[
     "persistent-ground-zero",
     animateOnReveal && "is-revealing",
+    fadeOnHover && "is-hover-fading",
   ]}
   aria-hidden="true"
 >
@@ -22,38 +24,41 @@ const { animateOnReveal = false } = Astro.props;
 
 <style>
   .persistent-ground-zero {
-    --persistent-gz-size: calc(var(--gz-circle-size) * 0.68);
-    --persistent-gz-stroke-width: calc(var(--gz-circle-stroke-width) * 0.72);
-    --persistent-gz-font-size: calc(var(--gz-circle-font-size) * 0.72);
-    --persistent-gz-letter-spacing: calc(var(--gz-circle-letter-spacing) * 0.84);
+    --persistent-gz-width: calc(var(--gz-marker-width) * 0.68);
+    --persistent-gz-height: calc(var(--gz-marker-height) * 0.7);
+    --persistent-gz-font-size: calc(var(--gz-marker-font-size) * 0.72);
+    --persistent-gz-letter-spacing: calc(var(--gz-marker-letter-spacing) * 0.84);
+    --persistent-gz-line-width: calc(var(--gz-marker-line-width) * 0.72);
+    --persistent-gz-line-thickness: var(--gz-marker-line-thickness);
+    --persistent-gz-line-gap: calc(var(--gz-marker-line-gap) * 0.82);
     position: fixed;
     right: var(--page-inline-offset);
-    bottom: var(--gz-circle-bottom);
+    bottom: var(--gz-marker-bottom);
     z-index: 20;
     pointer-events: none;
     mix-blend-mode: difference;
   }
 
   .persistent-ground-zero__marker {
-    width: var(--persistent-gz-size);
-    height: var(--persistent-gz-size);
+    width: var(--persistent-gz-width);
+    height: var(--persistent-gz-height);
     box-sizing: border-box;
     margin: 0;
     display: block;
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    opacity: 0.76;
-    transition: opacity 180ms ease-out;
+    opacity: 0.74;
+    transition: opacity 220ms ease-out;
     pointer-events: auto;
     user-select: none;
   }
 
   .persistent-ground-zero__graphic {
-    display: grid;
-    place-items: center;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
     width: 100%;
     height: 100%;
-    border: var(--persistent-gz-stroke-width) solid #ffffff;
-    border-radius: 999px;
+    padding-bottom: calc(var(--persistent-gz-line-gap) + var(--persistent-gz-line-thickness) + 0.02rem);
     background: transparent;
     color: #ffffff;
     font-family: var(--font-sans);
@@ -67,34 +72,56 @@ const { animateOnReveal = false } = Astro.props;
     font-variant-ligatures: none;
     font-variant-numeric: tabular-nums lining-nums;
     backface-visibility: hidden;
+    text-rendering: geometricPrecision;
     transform: translateZ(0);
   }
 
+  .persistent-ground-zero__graphic::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: var(--persistent-gz-line-width);
+    height: var(--persistent-gz-line-thickness);
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.78) 18%,
+      rgba(255, 255, 255, 0.78) 82%,
+      rgba(255, 255, 255, 0)
+    );
+    transform: translateX(-50%);
+    opacity: 0.96;
+    pointer-events: none;
+  }
+
   .persistent-ground-zero__code {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     min-width: 0;
-    transform: translateY(0.03em);
+    transform: translate3d(0.02em, 0.004em, 0);
   }
 
   .persistent-ground-zero.is-revealing .persistent-ground-zero__marker {
-    box-shadow: var(--gz-circle-shadow);
-    animation: persistent-gz-settle 900ms cubic-bezier(0.26, 0.08, 0.18, 1)
+    animation: persistent-gz-settle 760ms linear
       calc(var(--intro-image-settle-delay) + var(--intro-pre-swipe-duration)) forwards;
   }
 
-  .persistent-ground-zero__marker:hover {
-    opacity: 0.04;
+  .persistent-ground-zero.is-hover-fading .persistent-ground-zero__marker:hover {
+    opacity: 0;
   }
 
   @keyframes persistent-gz-settle {
     0% {
-      box-shadow: var(--gz-circle-shadow);
+      opacity: 0.92;
     }
 
     100% {
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      opacity: 0.74;
     }
   }
 </style>

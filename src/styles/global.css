@@ -46,16 +46,17 @@
     var(--page-inline-padding),
     calc((100vw - var(--page-max-width)) / 2 + var(--page-inline-padding))
   );
-  --gz-circle-size: clamp(5.85rem, 9vw, 7.8rem);
-  --gz-circle-stroke-width: 1.2px;
-  --gz-circle-font-size: clamp(1.55rem, 3vw, 2.28rem);
-  --gz-circle-letter-spacing: 0.086em;
-  --gz-circle-bottom: 4.5%;
-  --gz-circle-shadow:
-    0 0.82rem 1.8rem rgba(0, 0, 0, 0.24),
-    0 0.16rem 0.4rem rgba(0, 0, 0, 0.14);
+  --gz-marker-width: clamp(5.8rem, 8.9vw, 7.35rem);
+  --gz-marker-height: clamp(2.8rem, 4.6vw, 3.72rem);
+  --gz-marker-font-size: clamp(1.62rem, 3.05vw, 2.38rem);
+  --gz-marker-letter-spacing: 0.072em;
+  --gz-marker-bottom: 4.35%;
+  --gz-marker-text-color: rgba(247, 243, 235, 0.97);
+  --gz-marker-line-width: clamp(3.08rem, 4.9vw, 4.18rem);
+  --gz-marker-line-thickness: 1.05px;
+  --gz-marker-line-gap: clamp(0.42rem, 0.8vw, 0.56rem);
+  --gz-marker-line-color: rgba(247, 243, 235, 0.76);
   --intro-image-settle-delay: 220ms;
-  --intro-ready-pulse-duration: 1920ms;
   --intro-pre-swipe-duration: 8120ms;
   --intro-swipe-duration: 800ms;
 }
@@ -97,10 +98,13 @@ img {
 
 @media (max-width: 40rem) {
   :root {
-    --gz-circle-size: clamp(4.85rem, 20vw, 5.8rem);
-    --gz-circle-stroke-width: 1px;
-    --gz-circle-font-size: clamp(1.26rem, 5.6vw, 1.7rem);
-    --gz-circle-letter-spacing: 0.078em;
+    --gz-marker-width: clamp(4.8rem, 20vw, 5.55rem);
+    --gz-marker-height: clamp(2.3rem, 10vw, 2.92rem);
+    --gz-marker-font-size: clamp(1.32rem, 5.9vw, 1.82rem);
+    --gz-marker-letter-spacing: 0.068em;
+    --gz-marker-line-width: clamp(2.56rem, 10vw, 3.18rem);
+    --gz-marker-line-thickness: 1px;
+    --gz-marker-line-gap: clamp(0.3rem, 1.2vw, 0.42rem);
   }
 }
 

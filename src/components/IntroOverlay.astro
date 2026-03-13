@@ -1,26 +1,34 @@
 ---
+import { withBase } from "../lib/site";
+
 const floorLabels = [
   {
     code: "8TH",
-    style: "top: 10%; --label-delay: 2040ms; --label-duration: 1120ms;",
+    style:
+      "top: 10%; --label-delay: 2020ms; --label-duration: 1140ms; --code-shift-x: 0.016em; --code-shift-y: 0.006em;",
   },
   {
     code: "4TH",
-    style: "top: 25.5%; --label-delay: 2920ms; --label-duration: 1080ms;",
+    style:
+      "top: 25.5%; --label-delay: 2880ms; --label-duration: 1100ms; --code-shift-x: 0.014em; --code-shift-y: 0.006em;",
   },
   {
     code: "1ST",
-    style: "top: 41%; --label-delay: 3800ms; --label-duration: 1060ms;",
+    style:
+      "top: 41%; --label-delay: 3740ms; --label-duration: 1080ms; --code-shift-x: 0.042em; --code-shift-y: 0.01em;",
   },
   {
     code: "G",
-    style: "top: 56.5%; --label-delay: 4660ms; --label-duration: 1090ms;",
+    style:
+      "top: 56.5%; --label-delay: 4600ms; --label-duration: 1110ms; --code-shift-x: 0.008em; --code-shift-y: 0.005em;",
   },
   {
     code: "GZ",
-    style: "bottom: 4.5%; --label-delay: 5520ms; --label-duration: 2280ms;",
+    style:
+      "bottom: var(--gz-marker-bottom); --label-delay: 5460ms; --label-duration: 2360ms; --code-shift-x: 0.02em; --code-shift-y: 0.004em;",
   },
 ];
+const introImageSrc = withBase("/images/intro-image.jpg");
 ---
 
 <div
@@ -31,7 +39,7 @@ const floorLabels = [
 >
   <div class="intro-overlay__image-wrap">
     <img
-      src="/images/intro-image.jpg"
+      src={introImageSrc}
       alt=""
       class="intro-overlay__image"
       loading="eager"
@@ -45,7 +53,7 @@ const floorLabels = [
     {
       floorLabels.map((label, index) => (
         <p
-          class={`intro-overlay__label ${index === 0 ? "is-first" : ""} ${index === floorLabels.length - 1 ? "is-final" : ""}`}
+          class={`intro-overlay__label ${index === floorLabels.length - 1 ? "is-final" : ""}`}
           style={label.style}
         >
           <span class="intro-overlay__label-code">{label.code}</span>
@@ -94,7 +102,6 @@ const floorLabels = [
 <style>
   .intro-overlay {
     --image-settle-delay: var(--intro-image-settle-delay);
-    --pulse-duration: var(--intro-ready-pulse-duration);
     --pre-swipe-duration: var(--intro-pre-swipe-duration);
     --swipe-duration: var(--intro-swipe-duration);
     position: fixed;
@@ -123,8 +130,9 @@ const floorLabels = [
 
   .intro-overlay__scrim {
     background:
-      linear-gradient(to bottom, rgba(10, 10, 10, 0.32), rgba(10, 10, 10, 0.2)),
-      linear-gradient(to right, rgba(10, 10, 10, 0.12), rgba(10, 10, 10, 0));
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.3), rgba(10, 10, 10, 0.14) 42%, rgba(10, 10, 10, 0.22)),
+      linear-gradient(to left, rgba(10, 10, 10, 0.26), rgba(10, 10, 10, 0.1) 18%, rgba(10, 10, 10, 0) 34%),
+      linear-gradient(to right, rgba(10, 10, 10, 0.08), rgba(10, 10, 10, 0));
     opacity: 0;
     transition: opacity 260ms ease-out;
   }
@@ -137,41 +145,63 @@ const floorLabels = [
   .intro-overlay__label {
     position: absolute;
     right: var(--rail-inline-end);
-    display: grid;
-    place-items: center;
-    width: var(--gz-circle-size);
-    height: var(--gz-circle-size);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: var(--gz-marker-width);
+    height: var(--gz-marker-height);
     box-sizing: border-box;
     margin: 0;
     font-family: var(--font-sans);
-    font-size: var(--gz-circle-font-size);
+    padding-bottom: calc(var(--gz-marker-line-gap) + var(--gz-marker-line-thickness) + 0.02rem);
+    font-size: var(--gz-marker-font-size);
     font-weight: 500;
-    letter-spacing: var(--gz-circle-letter-spacing);
+    letter-spacing: var(--gz-marker-letter-spacing);
     line-height: 1;
     text-align: center;
     text-transform: uppercase;
-    color: rgba(247, 243, 235, 0.96);
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 10px rgba(0, 0, 0, 0.14);
+    color: var(--gz-marker-text-color);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
     font-kerning: none;
     font-variant-ligatures: none;
     font-variant-numeric: tabular-nums lining-nums;
-    border: var(--gz-circle-stroke-width) solid rgba(247, 243, 235, 0.84);
-    border-radius: 999px;
-    background: rgba(9, 9, 9, 0.05);
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    transform-origin: 100% 50%;
-    will-change: opacity, transform, filter, box-shadow;
+    text-rendering: geometricPrecision;
+    backface-visibility: hidden;
+    transform-origin: 100% 100%;
+    will-change: opacity, transform, filter;
     opacity: 0;
-    filter: blur(0.09rem);
-    transform: translate3d(0, -1.1rem, 0);
+    filter: blur(0.046rem);
+    transform: translate3d(0, -1.18rem, 0);
+  }
+
+  .intro-overlay__label::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: var(--gz-marker-line-width);
+    height: var(--gz-marker-line-thickness);
+    background: linear-gradient(
+      to right,
+      rgba(247, 243, 235, 0),
+      var(--gz-marker-line-color) 18%,
+      var(--gz-marker-line-color) 82%,
+      rgba(247, 243, 235, 0)
+    );
+    transform: translateX(-50%);
+    opacity: 0.94;
+    pointer-events: none;
   }
 
   .intro-overlay__label-code {
+    position: relative;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
     min-width: 0;
-    transform: translateY(0.03em);
+    transform: translate3d(var(--code-shift-x, 0em), var(--code-shift-y, 0em), 0);
   }
 
   .intro-overlay[data-ready="true"] .intro-overlay__image,
@@ -180,203 +210,89 @@ const floorLabels = [
   }
 
   .intro-overlay[data-ready="true"] {
-    animation: intro-plane-swipe var(--swipe-duration) cubic-bezier(0.42, 0, 0.18, 1)
+    animation: intro-plane-swipe var(--swipe-duration) cubic-bezier(0.52, 0, 0.16, 1)
       calc(var(--image-settle-delay) + var(--pre-swipe-duration)) forwards;
   }
 
   .intro-overlay[data-ready="true"] .intro-overlay__label {
-    animation: intro-label var(--label-duration) cubic-bezier(0.28, 0.02, 0.18, 1)
+    animation: intro-stop-label var(--label-duration) linear
       calc(var(--image-settle-delay) + var(--label-delay)) forwards;
-  }
-
-  .intro-overlay[data-ready="true"] .intro-overlay__label.is-first {
-    animation:
-      intro-ready-pulse var(--pulse-duration) cubic-bezier(0.34, 0.06, 0.22, 1)
-        calc(var(--image-settle-delay) + 120ms) 1 both,
-      intro-first-label var(--label-duration) cubic-bezier(0.28, 0.02, 0.18, 1)
-        calc(var(--image-settle-delay) + var(--label-delay)) forwards;
   }
 
   .intro-overlay[data-ready="true"] .intro-overlay__label.is-final {
-    animation: intro-final-label var(--label-duration) cubic-bezier(0.28, 0.02, 0.18, 1)
+    animation: intro-final-label var(--label-duration) linear
       calc(var(--image-settle-delay) + var(--label-delay)) forwards;
   }
 
-  @keyframes intro-ready-pulse {
-    0% {
-      opacity: 0.22;
-      filter: blur(0.03rem);
-      transform: translate3d(0, 0, 0) scale(0.988);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-
-    18% {
-      opacity: 0.48;
-      filter: blur(0.012rem);
-      transform: translate3d(0, 0, 0) scale(1.018);
-    }
-
-    34%,
-    58% {
-      opacity: 0.24;
-      filter: blur(0.024rem);
-      transform: translate3d(0, 0, 0) scale(1);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-
-    78% {
-      opacity: 0.5;
-      filter: blur(0.01rem);
-      transform: translate3d(0, 0, 0) scale(1.018);
-    }
-
-    100% {
-      opacity: 0.24;
-      filter: blur(0.024rem);
-      transform: translate3d(0, 0, 0) scale(1);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-  }
-
-  @keyframes intro-first-label {
-    0% {
-      opacity: 0.24;
-      filter: blur(0.024rem);
-      transform: translate3d(0, 0, 0) scale(1);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-
-    18% {
-      opacity: 0.78;
-      filter: blur(0.012rem);
-      transform: translate3d(0, -0.04rem, 0) scale(1);
-    }
-
-    30%,
-    56% {
-      opacity: 0.94;
-      filter: blur(0);
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-
-    74% {
-      opacity: 0.58;
-      filter: blur(0.012rem);
-      transform: translate3d(0, 0.03rem, 0) scale(1);
-    }
-
-    90% {
-      opacity: 0.18;
-      filter: blur(0.028rem);
-      transform: translate3d(0, 0.18rem, 0) scale(1);
-    }
-
-    100% {
-      opacity: 0;
-      filter: blur(0.042rem);
-      transform: translate3d(0, 0.46rem, 0) scale(1);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-  }
-
-  @keyframes intro-label {
+  @keyframes intro-stop-label {
     0% {
       opacity: 0;
-      filter: blur(0.09rem);
+      filter: blur(0.046rem);
       transform: translate3d(0, -1.18rem, 0);
     }
 
-    10% {
-      opacity: 0.34;
-      filter: blur(0.05rem);
-      transform: translate3d(0, -0.68rem, 0);
+    16% {
+      opacity: 0.22;
+      filter: blur(0.034rem);
+      transform: translate3d(0, -0.64rem, 0);
     }
 
-    22% {
-      opacity: 0.88;
-      filter: blur(0.018rem);
+    30% {
+      opacity: 0.74;
+      filter: blur(0.012rem);
       transform: translate3d(0, -0.12rem, 0);
     }
 
-    32%,
-    58% {
-      opacity: 0.94;
+    40%,
+    64% {
+      opacity: 0.97;
       filter: blur(0);
       transform: translate3d(0, 0, 0);
     }
 
-    74% {
-      opacity: 0.62;
-      filter: blur(0.012rem);
-      transform: translate3d(0, 0.04rem, 0);
-    }
-
-    90% {
-      opacity: 0.2;
-      filter: blur(0.035rem);
-      transform: translate3d(0, 0.2rem, 0);
+    76% {
+      opacity: 0.58;
+      filter: blur(0.008rem);
+      transform: translate3d(0, 0.01rem, 0);
     }
 
     100% {
       opacity: 0;
-      filter: blur(0.05rem);
-      transform: translate3d(0, 0.54rem, 0);
+      filter: blur(0.026rem);
+      transform: translate3d(0, 0.34rem, 0);
     }
   }
 
   @keyframes intro-final-label {
     0% {
       opacity: 0;
-      filter: blur(0.08rem);
-      transform: translate3d(0, -1.08rem, 0) scale(0.988);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      filter: blur(0.046rem);
+      transform: translate3d(0, -1.1rem, 0);
     }
 
-    14% {
-      opacity: 0.36;
-      filter: blur(0.044rem);
-      transform: translate3d(0, -0.56rem, 0) scale(0.994);
+    16% {
+      opacity: 0.22;
+      filter: blur(0.032rem);
+      transform: translate3d(0, -0.58rem, 0);
     }
 
-    28% {
-      opacity: 0.9;
-      filter: blur(0.016rem);
-      transform: translate3d(0, -0.06rem, 0) scale(1);
+    30% {
+      opacity: 0.78;
+      filter: blur(0.012rem);
+      transform: translate3d(0, -0.1rem, 0);
     }
 
-    40% {
-      opacity: 0.96;
+    40%,
+    88% {
+      opacity: 0.97;
       filter: blur(0);
-      transform: translate3d(0, 0, 0) scale(1);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-
-    54% {
-      opacity: 1;
-      filter: blur(0);
-      transform: translate3d(0, 0, 0) scale(1.028);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-
-    64% {
-      opacity: 0.96;
-      filter: blur(0);
-      transform: translate3d(0, 0, 0) scale(1);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    }
-
-    78% {
-      opacity: 0.96;
-      filter: blur(0);
-      transform: translate3d(0, 0, 0) scale(1);
-      box-shadow: var(--gz-circle-shadow);
+      transform: translate3d(0, 0, 0);
     }
 
     100% {
-      opacity: 0.96;
+      opacity: 0.97;
       filter: blur(0);
-      transform: translate3d(0, 0, 0) scale(1);
-      box-shadow: var(--gz-circle-shadow);
+      transform: translate3d(0, 0, 0);
     }
   }
 

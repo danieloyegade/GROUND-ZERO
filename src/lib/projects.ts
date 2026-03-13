@@ -1,4 +1,5 @@
 import type { CollectionEntry } from "astro:content";
+import { withBase } from "./site";
 
 export type ProjectEntry = CollectionEntry<"projects">;
 
@@ -11,7 +12,7 @@ export interface ProjectSequenceLink {
 export const sortProjectsByOrder = (projects: ProjectEntry[]) =>
   [...projects].sort((a, b) => a.data.order - b.data.order);
 
-export const projectPath = (slug: string) => `/selected-work/${slug}/`;
+export const projectPath = (slug: string) => withBase(`/selected-work/${slug}/`);
 
 export const mapProjectForGrid = (project: ProjectEntry) => ({
   slug: project.slug,

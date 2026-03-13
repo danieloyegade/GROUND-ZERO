@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import PersistentGroundZero from "../components/PersistentGroundZero.astro";
+import { withBase, withoutBase } from "../lib/site";
 
 interface Props {
   title: string;
@@ -13,10 +14,11 @@ const {
   description = "GROUND ZERO is a minimal editorial portfolio built with Astro.",
   preloadImage,
 } = Astro.props;
-const pathname = Astro.url.pathname;
+const pathname = withoutBase(Astro.url.pathname);
 const isSelectedWorkPage = pathname === "/" || pathname.startsWith("/selected-work");
 const isInformationPage = pathname.startsWith("/information");
 const shouldAnimatePersistentGroundZero = pathname === "/";
+const shouldFadePersistentGroundZero = pathname === "/selected-work" || pathname === "/selected-work/";
 const showPersistentGroundZero = pathname === "/" || pathname === "/selected-work" || pathname === "/selected-work/";
 
 const canonicalPath = Astro.url.pathname.endsWith("/")
@@ -33,11 +35,11 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
     <meta name="description" content={description} />
     <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" href="/gz_favicon_new.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
-    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-    {preloadImage && <link rel="preload" as="image" href={preloadImage} />}
+    <link rel="icon" href={withBase("/gz_favicon_new.svg")} type="image/svg+xml" />
+    <link rel="icon" href={withBase("/favicon-32x32.png")} sizes="32x32" type="image/png" />
+    <link rel="icon" href={withBase("/favicon-16x16.png")} sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href={withBase("/apple-touch-icon.png")} sizes="180x180" />
+    {preloadImage && <link rel="preload" as="image" href={withBase(preloadImage)} />}
     <title>{title}</title>
   </head>
   <body class="bg-[var(--page-background)] text-[var(--page-foreground)] antialiased">
@@ -45,13 +47,13 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
       <header class="site-header">
         <nav class="site-header__nav" aria-label="Primary">
           <a
-            href="/"
+            href={withBase("/")}
             class="site-header__link site-header__link--brand"
           >
             GROUND ZERO
           </a>
           <a
-            href="/selected-work"
+            href={withBase("/selected-work/")}
             class:list={[
               "site-header__link site-header__link--work",
               isSelectedWorkPage && "is-active",
@@ -60,7 +62,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
             Selected Works
           </a>
           <a
-            href="/information"
+            href={withBase("/information/")}
             class:list={[
               "site-header__link site-header__link--information",
               isInformationPage && "is-active",
@@ -71,7 +73,10 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
         </nav>
       </header>
       {showPersistentGroundZero && (
-        <PersistentGroundZero animateOnReveal={shouldAnimatePersistentGroundZero} />
+        <PersistentGroundZero
+          animateOnReveal={shouldAnimatePersistentGroundZero}
+          fadeOnHover={shouldFadePersistentGroundZero}
+        />
       )}
       <main class="site-main">
         <slot />
