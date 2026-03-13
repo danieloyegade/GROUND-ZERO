@@ -12,6 +12,9 @@ const {
   description = "GROUND ZERO is a minimal editorial portfolio built with Astro.",
   preloadImage,
 } = Astro.props;
+const pathname = Astro.url.pathname;
+const isSelectedWorkPage = pathname === "/" || pathname.startsWith("/selected-work");
+const isInformationPage = pathname.startsWith("/information");
 
 const canonicalPath = Astro.url.pathname.endsWith("/")
   ? Astro.url.pathname
@@ -31,25 +34,118 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
   </head>
   <body class="bg-[var(--page-background)] text-[var(--page-foreground)] antialiased">
     <div class="min-h-screen">
-      <header class="fixed inset-x-0 top-0 z-20 border-b border-black/6 bg-[color:rgba(255,255,255,0.92)]">
-        <nav class="mx-auto flex w-full max-w-[96rem] items-center justify-between px-6 py-5 sm:px-10 lg:px-14">
+      <header class="site-header">
+        <nav class="site-header__nav" aria-label="Primary">
           <a
             href="/"
-            class="text-[0.72rem] font-[650] uppercase tracking-[0.28em] text-[var(--page-foreground)] transition-colors hover:text-black"
+            class="site-header__link site-header__link--brand"
           >
             GROUND ZERO
           </a>
           <a
+            href="/selected-work"
+            class:list={[
+              "site-header__link site-header__link--work",
+              isSelectedWorkPage && "is-active",
+            ]}
+          >
+            Selected Works
+          </a>
+          <a
             href="/information"
-            class="text-[0.72rem] font-[650] uppercase tracking-[0.28em] text-[var(--page-foreground)] transition-colors hover:text-black"
+            class:list={[
+              "site-header__link site-header__link--information",
+              isInformationPage && "is-active",
+            ]}
           >
             Information
           </a>
         </nav>
       </header>
-      <main>
+      <main class="site-main">
         <slot />
       </main>
     </div>
   </body>
 </html>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 30;
+    pointer-events: none;
+    mix-blend-mode: difference;
+  }
+
+  .site-header__nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: end;
+    gap: clamp(0.65rem, 1.6vw, 1.6rem);
+    max-width: var(--page-max-width);
+    margin: 0 auto;
+    min-height: var(--header-clearance);
+    padding: 0.92rem var(--page-inline-padding) 0.72rem;
+    pointer-events: auto;
+  }
+
+  .site-header__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-size: clamp(0.79rem, 0.68rem + 0.24vw, 1.13rem);
+    font-weight: 700;
+    font-synthesis: weight;
+    letter-spacing: 0.108em;
+    line-height: 0.94;
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-kerning: none;
+    font-variant-ligatures: none;
+    text-rendering: geometricPrecision;
+    transition: opacity 160ms ease-out;
+    opacity: 0.7;
+  }
+
+  .site-header__link:hover {
+    opacity: 0.88;
+  }
+
+  .site-header__link--brand,
+  .site-header__link.is-active {
+    opacity: 0.96;
+  }
+
+  .site-header__link--brand {
+    justify-self: start;
+  }
+
+  .site-header__link--work {
+    justify-self: center;
+  }
+
+  .site-header__link--information {
+    justify-self: end;
+  }
+
+  .site-main {
+    padding-top: var(--header-clearance);
+  }
+
+  @media (max-width: 40rem) {
+    .site-header__nav {
+      gap: 0.5rem;
+      padding-top: 0.82rem;
+      padding-bottom: 0.7rem;
+    }
+
+    .site-header__link {
+      font-size: 0.73rem;
+      letter-spacing: 0.09em;
+    }
+  }
+</style>

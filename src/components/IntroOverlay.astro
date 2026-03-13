@@ -2,28 +2,23 @@
 const floorLabels = [
   {
     text: "EIGHTH FLOOR",
-    style:
-      "top: 12%; --label-delay: 0ms; --label-duration: 1150ms; --label-tracking: 0.145em;",
+    style: "top: 12%; --label-delay: 0ms; --label-duration: 1150ms;",
   },
   {
     text: "FOURTH FLOOR",
-    style:
-      "top: 28%; --label-delay: 1150ms; --label-duration: 1000ms; --label-tracking: 0.148em;",
+    style: "top: 28%; --label-delay: 1150ms; --label-duration: 1000ms;",
   },
   {
     text: "FIRST FLOOR",
-    style:
-      "top: 44%; --label-delay: 2150ms; --label-duration: 925ms; --label-tracking: 0.164em;",
+    style: "top: 44%; --label-delay: 2150ms; --label-duration: 925ms;",
   },
   {
     text: "GROUND FLOOR",
-    style:
-      "top: 60%; --label-delay: 3075ms; --label-duration: 975ms; --label-tracking: 0.144em;",
+    style: "top: 60%; --label-delay: 3075ms; --label-duration: 975ms;",
   },
   {
     text: "GROUND ZERO",
-    style:
-      "bottom: 8%; --label-delay: 4050ms; --label-duration: 1650ms; --label-tracking: 0.156em;",
+    style: "bottom: 7%; --label-delay: 4050ms; --label-duration: 1650ms;",
   },
 ];
 ---
@@ -132,8 +127,8 @@ const floorLabels = [
   }
 
   .intro-overlay__labels {
-    --rail-inline-end: clamp(1.5rem, 4vw, 4rem);
-    --rail-width: clamp(12rem, 18vw, 15rem);
+    --rail-inline-end: var(--page-inline-offset);
+    --rail-width: clamp(16.5rem, 25vw, 21.5rem);
     padding: clamp(1.5rem, 3vw, 3rem);
   }
 
@@ -144,9 +139,9 @@ const floorLabels = [
     margin: 0;
     white-space: nowrap;
     font-family: var(--font-sans);
-    font-size: clamp(1.08rem, 2.15vw, 2.1rem);
+    font-size: clamp(1.56rem, 3.1vw, 3.02rem);
     font-weight: 500;
-    letter-spacing: var(--label-tracking, 0.15em);
+    letter-spacing: 0.152em;
     line-height: 0.96;
     text-align: right;
     text-transform: uppercase;
@@ -155,8 +150,10 @@ const floorLabels = [
     font-kerning: none;
     font-variant-ligatures: none;
     transform-origin: 100% 50%;
+    will-change: opacity, transform, filter;
     opacity: 0;
-    transform: translate3d(0, -0.8rem, 0);
+    filter: blur(0.24rem);
+    transform: translate3d(0, -0.95rem, 0);
   }
 
   .intro-overlay[data-ready="true"] .intro-overlay__image,
@@ -182,30 +179,53 @@ const floorLabels = [
   @keyframes intro-label {
     0% {
       opacity: 0;
-      transform: translate3d(0, -0.65rem, 0);
+      filter: blur(0.24rem);
+      transform: translate3d(0, -1.05rem, 0);
     }
 
-    18%,
-    72% {
+    16% {
+      opacity: 0.44;
+      filter: blur(0.12rem);
+      transform: translate3d(0, -0.46rem, 0);
+    }
+
+    30%,
+    70% {
       opacity: 1;
+      filter: blur(0);
       transform: translate3d(0, 0, 0);
+    }
+
+    86% {
+      opacity: 0.42;
+      filter: blur(0.08rem);
+      transform: translate3d(0, 0.18rem, 0);
     }
 
     100% {
       opacity: 0;
-      transform: translate3d(0, 0.38rem, 0);
+      filter: blur(0.2rem);
+      transform: translate3d(0, 0.62rem, 0);
     }
   }
 
   @keyframes intro-final-label {
     0% {
       opacity: 0;
-      transform: translate3d(0, -0.65rem, 0);
+      filter: blur(0.24rem);
+      transform: translate3d(0, -1.05rem, 0);
     }
 
-    14%,
+    16% {
+      opacity: 0.48;
+      filter: blur(0.11rem);
+      transform: translate3d(0, -0.36rem, 0);
+    }
+
+    30%,
     100% {
       opacity: 1;
+      filter: blur(0);
       transform: translate3d(0, 0, 0);
     }
   }
@@ -230,13 +250,12 @@ const floorLabels = [
 
   @media (max-width: 40rem) {
     .intro-overlay__labels {
-      --rail-inline-end: 1.25rem;
-      --rail-width: min(13rem, calc(100vw - 2.5rem));
+      --rail-width: min(18rem, calc(100vw - 2.5rem));
     }
 
     .intro-overlay__label {
-      font-size: clamp(1rem, 5vw, 1.32rem);
-      letter-spacing: calc(var(--label-tracking, 0.15em) - 0.01em);
+      font-size: clamp(1.44rem, 7.2vw, 1.9rem);
+      letter-spacing: 0.142em;
     }
   }
 
