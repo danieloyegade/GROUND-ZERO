@@ -1,24 +1,24 @@
 ---
 const floorLabels = [
   {
-    text: "EIGHTH FLOOR",
-    style: "top: 8.25%; --label-delay: 0ms; --label-duration: 1280ms;",
+    code: "8TH",
+    style: "top: 10%; --label-delay: 1200ms; --label-duration: 1160ms;",
   },
   {
-    text: "FOURTH FLOOR",
-    style: "top: 24.25%; --label-delay: 1280ms; --label-duration: 1110ms;",
+    code: "4TH",
+    style: "top: 25.5%; --label-delay: 2120ms; --label-duration: 1120ms;",
   },
   {
-    text: "FIRST FLOOR",
-    style: "top: 40.25%; --label-delay: 2390ms; --label-duration: 1060ms;",
+    code: "1ST",
+    style: "top: 41%; --label-delay: 3040ms; --label-duration: 1100ms;",
   },
   {
-    text: "GROUND FLOOR",
-    style: "top: 56.25%; --label-delay: 3450ms; --label-duration: 1090ms;",
+    code: "G",
+    style: "top: 56.5%; --label-delay: 3940ms; --label-duration: 1140ms;",
   },
   {
-    text: "GROUND ZERO",
-    style: "bottom: 4.25%; --label-delay: 4540ms; --label-duration: 1900ms;",
+    code: "GZ",
+    style: "bottom: 4.5%; --label-delay: 4860ms; --label-duration: 1880ms;",
   },
 ];
 ---
@@ -28,7 +28,7 @@ const floorLabels = [
   data-intro-overlay
   data-ready="false"
   aria-hidden="true"
-  style="--image-settle-delay: 220ms; --pre-swipe-duration: 6540ms; --swipe-duration: 800ms;"
+  style="--image-settle-delay: 220ms; --pulse-duration: 1080ms; --pre-swipe-duration: 6940ms; --swipe-duration: 800ms;"
 >
   <div class="intro-overlay__image-wrap">
     <img
@@ -46,10 +46,10 @@ const floorLabels = [
     {
       floorLabels.map((label, index) => (
         <p
-          class={`intro-overlay__label ${index === floorLabels.length - 1 ? "is-final" : ""}`}
+          class={`intro-overlay__label ${index === 0 ? "is-first" : ""} ${index === floorLabels.length - 1 ? "is-final" : ""}`}
           style={label.style}
         >
-          {label.text}
+          <span class="intro-overlay__label-code">{label.code}</span>
         </p>
       ))
     }
@@ -128,33 +128,48 @@ const floorLabels = [
 
   .intro-overlay__labels {
     --rail-inline-end: var(--page-inline-offset);
-    --rail-width: clamp(28rem, 49vw, 50rem);
+    --circle-size: clamp(5.85rem, 9vw, 7.8rem);
+    --circle-stroke-width: 1.2px;
     padding: 0;
   }
 
   .intro-overlay__label {
     position: absolute;
     right: var(--rail-inline-end);
-    width: min(var(--rail-width), calc(100vw - (var(--rail-inline-end) * 2)));
+    display: grid;
+    place-items: center;
+    width: var(--circle-size);
+    height: var(--circle-size);
     box-sizing: border-box;
     margin: 0;
-    white-space: nowrap;
     font-family: var(--font-sans);
-    font-size: clamp(2.75rem, 5.45vw, 5.9rem);
+    font-size: clamp(1.55rem, 3vw, 2.28rem);
     font-weight: 500;
-    letter-spacing: 0.094em;
-    line-height: 0.82;
-    text-align: right;
+    letter-spacing: 0.086em;
+    line-height: 1;
+    text-align: center;
     text-transform: uppercase;
     color: rgba(247, 243, 235, 0.96);
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.14), 0 2px 10px rgba(0, 0, 0, 0.14);
     font-kerning: none;
     font-variant-ligatures: none;
+    font-variant-numeric: tabular-nums lining-nums;
+    border: var(--circle-stroke-width) solid rgba(247, 243, 235, 0.84);
+    border-radius: 999px;
+    background: rgba(9, 9, 9, 0.05);
     transform-origin: 100% 50%;
     will-change: opacity, transform, filter;
     opacity: 0;
-    filter: blur(0.16rem);
-    transform: translate3d(0, -1.7rem, 0);
+    filter: blur(0.09rem);
+    transform: translate3d(0, -1.1rem, 0);
+  }
+
+  .intro-overlay__label-code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    transform: translateY(0.03em);
   }
 
   .intro-overlay[data-ready="true"] .intro-overlay__image,
@@ -172,60 +187,106 @@ const floorLabels = [
       calc(var(--image-settle-delay) + var(--label-delay)) forwards;
   }
 
+  .intro-overlay[data-ready="true"] .intro-overlay__label.is-first {
+    animation:
+      intro-ready-pulse calc(var(--pulse-duration) / 3) cubic-bezier(0.38, 0.04, 0.24, 1)
+        calc(var(--image-settle-delay) + 120ms) 3 both,
+      intro-label var(--label-duration) cubic-bezier(0.28, 0.02, 0.18, 1)
+        calc(var(--image-settle-delay) + var(--label-delay)) forwards;
+  }
+
   .intro-overlay[data-ready="true"] .intro-overlay__label.is-final {
     animation: intro-final-label var(--label-duration) cubic-bezier(0.28, 0.02, 0.18, 1)
       calc(var(--image-settle-delay) + var(--label-delay)) forwards;
   }
 
+  @keyframes intro-ready-pulse {
+    0% {
+      opacity: 0.22;
+      filter: blur(0.035rem);
+      transform: translate3d(0, 0, 0);
+    }
+
+    46% {
+      opacity: 0.5;
+      filter: blur(0.012rem);
+      transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+      opacity: 0.24;
+      filter: blur(0.028rem);
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
   @keyframes intro-label {
     0% {
       opacity: 0;
-      filter: blur(0.16rem);
-      transform: translate3d(0, -1.95rem, 0);
+      filter: blur(0.09rem);
+      transform: translate3d(0, -1.18rem, 0);
     }
 
-    12% {
-      opacity: 0.6;
-      filter: blur(0.095rem);
-      transform: translate3d(0, -0.92rem, 0);
+    10% {
+      opacity: 0.34;
+      filter: blur(0.05rem);
+      transform: translate3d(0, -0.68rem, 0);
     }
 
-    28%,
-    66% {
-      opacity: 1;
+    22% {
+      opacity: 0.88;
+      filter: blur(0.018rem);
+      transform: translate3d(0, -0.12rem, 0);
+    }
+
+    32%,
+    58% {
+      opacity: 0.94;
       filter: blur(0);
       transform: translate3d(0, 0, 0);
     }
 
-    82% {
-      opacity: 0.58;
-      filter: blur(0.07rem);
-      transform: translate3d(0, 0.34rem, 0);
+    74% {
+      opacity: 0.62;
+      filter: blur(0.012rem);
+      transform: translate3d(0, 0.04rem, 0);
+    }
+
+    90% {
+      opacity: 0.2;
+      filter: blur(0.035rem);
+      transform: translate3d(0, 0.2rem, 0);
     }
 
     100% {
       opacity: 0;
-      filter: blur(0.1rem);
-      transform: translate3d(0, 1.18rem, 0);
+      filter: blur(0.05rem);
+      transform: translate3d(0, 0.54rem, 0);
     }
   }
 
   @keyframes intro-final-label {
     0% {
       opacity: 0;
-      filter: blur(0.16rem);
-      transform: translate3d(0, -1.95rem, 0);
-    }
-
-    12% {
-      opacity: 0.66;
       filter: blur(0.09rem);
-      transform: translate3d(0, -0.9rem, 0);
+      transform: translate3d(0, -1.18rem, 0);
     }
 
-    28%,
+    10% {
+      opacity: 0.38;
+      filter: blur(0.05rem);
+      transform: translate3d(0, -0.66rem, 0);
+    }
+
+    22% {
+      opacity: 0.9;
+      filter: blur(0.018rem);
+      transform: translate3d(0, -0.1rem, 0);
+    }
+
+    32%,
     100% {
-      opacity: 1;
+      opacity: 0.96;
       filter: blur(0);
       transform: translate3d(0, 0, 0);
     }
@@ -251,13 +312,13 @@ const floorLabels = [
 
   @media (max-width: 40rem) {
     .intro-overlay__labels {
-      --rail-width: min(23.5rem, calc(100vw - 2.5rem));
+      --circle-size: clamp(4.85rem, 20vw, 5.8rem);
+      --circle-stroke-width: 1px;
     }
 
     .intro-overlay__label {
-      font-size: clamp(1.95rem, 8.7vw, 2.75rem);
-      letter-spacing: 0.088em;
-      line-height: 0.84;
+      font-size: clamp(1.26rem, 5.6vw, 1.7rem);
+      letter-spacing: 0.078em;
     }
   }
 
