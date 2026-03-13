@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import ProjectDetailPage from "../../components/ProjectDetailPage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import type { ProjectEntry } from "../../lib/projects";
+import { sortProjectsByOrder } from "../../lib/projects";
+
+export async function getStaticPaths() {
+  const projects = sortProjectsByOrder(await getCollection("projects"));
+
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: ProjectEntry;
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+const hasProjectBody = project.data.status !== "placeholder" && project.body.trim().length > 0;
+---
+
+<BaseLayout
+  title={`${project.data.title} | GROUND ZERO`}
+  description={project.data.descriptor}
+  preloadImage={project.data.image}
+>
+  <ProjectDetailPage
+    title={project.data.title}
+    descriptor={project.data.descriptor}
+    image={project.data.image}
+    detailImages={project.data.detailImages}
+    credits={project.data.credits}
+    showBody={hasProjectBody}
+  >
+    {hasProjectBody && <Content />}
+  </ProjectDetailPage>
+</BaseLayout>

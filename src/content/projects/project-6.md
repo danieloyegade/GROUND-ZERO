@@ -1,12 +1,13 @@
 ---
 title: "Abiola"
-slug: "Abiola"
+slug: "abiola"
 image: "/images/project-6.jpg"
 descriptor: "London, 2023."
-display:
-  orientation: "portrait"
-  cropFocus: "upper-third"
-  size: "small"
+order: 6
+layoutPattern: "paired-left"
+visualWeight: "support"
+orientation: "portrait"
+cropFocus: "upper-third"
 status: "placeholder"
 ---
 

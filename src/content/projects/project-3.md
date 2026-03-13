@@ -1,12 +1,13 @@
 ---
 title: "Someplace Else"
-slug: "Someplace Else"
+slug: "someplace-else"
 image: "/images/project-3.jpg"
 descriptor: "Directed By Daniel Oyegade"
-display:
-  orientation: "wide"
-  cropFocus: "center"
-  size: "large"
+order: 3
+layoutPattern: "wide-band"
+visualWeight: "dominant"
+orientation: "wide"
+cropFocus: "center"
 status: "placeholder"
 ---
 

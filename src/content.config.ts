@@ -1,4 +1,10 @@
 import { defineCollection, z } from "astro:content";
+import {
+  projectCropFocusValues,
+  projectLayoutPatternValues,
+  projectOrientationValues,
+  projectVisualWeightValues,
+} from "./lib/projectLayout";
 
 const projects = defineCollection({
   type: "content",
@@ -6,11 +12,20 @@ const projects = defineCollection({
     title: z.string(),
     image: z.string(),
     descriptor: z.string(),
-    display: z.object({
-      orientation: z.enum(["portrait", "landscape", "wide"]),
-      cropFocus: z.enum(["center", "top", "upper-third"]).default("center"),
-      size: z.enum(["small", "medium", "large", "hero"]).default("medium"),
-    }),
+    order: z.number().int().positive(),
+    layoutPattern: z.enum(projectLayoutPatternValues),
+    visualWeight: z.enum(projectVisualWeightValues).default("standard"),
+    orientation: z.enum(projectOrientationValues),
+    cropFocus: z.enum(projectCropFocusValues).default("center"),
+    detailImages: z.array(z.string()).optional(),
+    credits: z
+      .array(
+        z.object({
+          role: z.string(),
+          name: z.string(),
+        })
+      )
+      .optional(),
     status: z.string().default("placeholder"),
   }),
 });

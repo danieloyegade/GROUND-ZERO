@@ -17,6 +17,7 @@ const pathname = Astro.url.pathname;
 const isSelectedWorkPage = pathname === "/" || pathname.startsWith("/selected-work");
 const isInformationPage = pathname.startsWith("/information");
 const shouldAnimatePersistentGroundZero = pathname === "/";
+const showPersistentGroundZero = pathname === "/" || pathname === "/selected-work" || pathname === "/selected-work/";
 
 const canonicalPath = Astro.url.pathname.endsWith("/")
   ? Astro.url.pathname
@@ -64,7 +65,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
           </a>
         </nav>
       </header>
-      {isSelectedWorkPage && (
+      {showPersistentGroundZero && (
         <PersistentGroundZero animateOnReveal={shouldAnimatePersistentGroundZero} />
       )}
       <main class="site-main">

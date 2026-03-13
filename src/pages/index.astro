@@ -3,8 +3,9 @@ import { getCollection } from "astro:content";
 import IntroOverlay from "../components/IntroOverlay.astro";
 import ProjectGrid from "../components/ProjectGrid.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { mapProjectForGrid, sortProjectsByOrder } from "../lib/projects";
 
-const projects = (await getCollection("projects")).sort((a, b) => a.id.localeCompare(b.id));
+const projects = sortProjectsByOrder(await getCollection("projects"));
 ---
 
 <BaseLayout
@@ -13,12 +14,5 @@ const projects = (await getCollection("projects")).sort((a, b) => a.id.localeCom
   preloadImage="/images/intro-image.jpg"
 >
   <IntroOverlay />
-  <ProjectGrid
-    projects={projects.map((project) => ({
-      title: project.data.title,
-      image: project.data.image,
-      descriptor: project.data.descriptor,
-      display: project.data.display,
-    }))}
-  />
+  <ProjectGrid projects={projects.map(mapProjectForGrid)} />
 </BaseLayout>

@@ -1,0 +1,322 @@
+---
+interface Credit {
+  role: string;
+  name: string;
+}
+
+interface Props {
+  title: string;
+  descriptor: string;
+  image: string;
+  detailImages?: string[];
+  credits?: Credit[];
+  showBody?: boolean;
+}
+
+const {
+  title,
+  descriptor,
+  image,
+  detailImages = [],
+  credits = [],
+  showBody = false,
+} = Astro.props;
+
+const hasGallery = detailImages.length > 0;
+const hasCredits = credits.length > 0;
+const hasSupplementalContent = showBody || hasGallery || hasCredits;
+---
+
+<article class="project-detail">
+  <div class="project-detail__frame">
+    <a class="project-detail__back-link" href="/selected-work/">
+      Selected Works
+    </a>
+
+    <header class="project-detail__header">
+      <div class="project-detail__copy">
+        <p class="project-detail__eyebrow">Project</p>
+        <h1 class="project-detail__title">{title}</h1>
+      </div>
+      <p class="project-detail__descriptor">{descriptor}</p>
+    </header>
+
+    <figure class="project-detail__hero">
+      <img
+        src={image}
+        alt={title}
+        class="project-detail__hero-image"
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
+
+    {hasSupplementalContent && (
+      <section class:list={["project-detail__supplemental", hasCredits && "has-credits"]}>
+        {showBody && (
+          <div class="project-detail__body">
+            <slot />
+          </div>
+        )}
+
+        {hasGallery && (
+          <div class="project-detail__gallery" aria-label={`${title} additional images`}>
+            {detailImages.map((detailImage, index) => (
+              <figure class="project-detail__detail-figure">
+                <img
+                  src={detailImage}
+                  alt={`${title} detail ${index + 1}`}
+                  class="project-detail__detail-image"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ))}
+          </div>
+        )}
+
+        {hasCredits && (
+          <aside class="project-detail__credits" aria-label="Project credits">
+            <p class="project-detail__credits-label">Credits</p>
+            <dl class="project-detail__credits-list">
+              {credits.map((credit) => (
+                <div class="project-detail__credit-row">
+                  <dt class="project-detail__credit-role">{credit.role}</dt>
+                  <dd class="project-detail__credit-name">{credit.name}</dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
+        )}
+      </section>
+    )}
+  </div>
+</article>
+
+<style>
+  .project-detail {
+    padding: 1.75rem 1.5rem 6rem;
+  }
+
+  .project-detail__frame {
+    max-width: min(92rem, calc(100vw - (var(--page-inline-padding) * 2)));
+    margin: 0 auto;
+  }
+
+  .project-detail__back-link {
+    display: inline-flex;
+    align-items: center;
+    color: rgba(16, 15, 13, 0.64);
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 160ms ease-out, opacity 160ms ease-out;
+  }
+
+  .project-detail__back-link:hover,
+  .project-detail__back-link:focus-visible {
+    color: rgba(16, 15, 13, 0.92);
+    opacity: 1;
+  }
+
+  .project-detail__back-link:focus-visible {
+    outline: none;
+  }
+
+  .project-detail__header {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.9rem;
+    margin-bottom: 1.85rem;
+  }
+
+  .project-detail__copy {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .project-detail__eyebrow {
+    margin: 0;
+    color: rgba(16, 15, 13, 0.48);
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .project-detail__title {
+    margin: 0;
+    max-width: 14ch;
+    color: rgba(16, 15, 13, 0.98);
+    font-family: var(--font-serif);
+    font-size: clamp(2.1rem, 4.2vw, 4.5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    text-wrap: balance;
+  }
+
+  .project-detail__descriptor {
+    margin: 0;
+    max-width: 38rem;
+    color: rgba(16, 15, 13, 0.72);
+    font-family: var(--font-sans);
+    font-size: clamp(0.86rem, 0.76rem + 0.24vw, 1rem);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.48;
+  }
+
+  .project-detail__hero {
+    margin: 0;
+    overflow: clip;
+    background: rgba(20, 18, 16, 0.04);
+  }
+
+  .project-detail__hero-image,
+  .project-detail__detail-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .project-detail__supplemental {
+    display: grid;
+    gap: 3rem;
+    margin-top: 2.5rem;
+  }
+
+  .project-detail__body {
+    max-width: 40rem;
+    color: rgba(16, 15, 13, 0.78);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .project-detail__body :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .project-detail__body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .project-detail__gallery {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .project-detail__detail-figure {
+    margin: 0;
+    overflow: clip;
+    background: rgba(20, 18, 16, 0.04);
+  }
+
+  .project-detail__credits {
+    display: grid;
+    gap: 0.9rem;
+    max-width: 24rem;
+  }
+
+  .project-detail__credits-label {
+    margin: 0;
+    color: rgba(16, 15, 13, 0.52);
+    font-family: var(--font-sans);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .project-detail__credits-list {
+    display: grid;
+    gap: 0.72rem;
+    margin: 0;
+  }
+
+  .project-detail__credit-row {
+    display: grid;
+    grid-template-columns: minmax(0, 8rem) minmax(0, 1fr);
+    gap: 0.9rem;
+    margin: 0;
+  }
+
+  .project-detail__credit-role,
+  .project-detail__credit-name {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .project-detail__credit-role {
+    color: rgba(16, 15, 13, 0.46);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .project-detail__credit-name {
+    color: rgba(16, 15, 13, 0.82);
+  }
+
+  @media (min-width: 48rem) {
+    .project-detail {
+      padding: 2.25rem 2.5rem 8rem;
+    }
+
+    .project-detail__header {
+      grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 0.75fr);
+      align-items: end;
+      gap: 2rem;
+      margin-top: 2.35rem;
+      margin-bottom: 2.4rem;
+    }
+
+    .project-detail__supplemental {
+      gap: 3.5rem;
+      margin-top: 3rem;
+    }
+
+    .project-detail__gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem;
+    }
+  }
+
+  @media (min-width: 72rem) {
+    .project-detail {
+      padding-inline: 3.5rem;
+    }
+
+    .project-detail__supplemental {
+      grid-template-columns: minmax(0, 1fr) minmax(15rem, 19rem);
+      align-items: start;
+      gap: 4rem;
+    }
+
+    .project-detail__supplemental:not(.has-credits) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .project-detail__body,
+    .project-detail__gallery {
+      grid-column: 1;
+    }
+
+    .project-detail__credits {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      position: sticky;
+      top: calc(var(--header-clearance) + 1.6rem);
+    }
+  }
+</style>

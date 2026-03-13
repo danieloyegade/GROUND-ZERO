@@ -1,12 +1,13 @@
 ---
 title: "Annabella"
-slug: "Annabella"
+slug: "annabella"
 image: "/images/project-5.jpg"
 descriptor: "Manchester, 2025."
-display:
-  orientation: "portrait"
-  cropFocus: "upper-third"
-  size: "hero"
+order: 5
+layoutPattern: "lead-right"
+visualWeight: "hero"
+orientation: "portrait"
+cropFocus: "upper-third"
 status: "placeholder"
 ---
 

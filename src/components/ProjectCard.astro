@@ -1,5 +1,8 @@
 ---
+import { projectPath } from "../lib/projects";
+
 interface Props {
+  slug: string;
   title: string;
   image: string;
   descriptor: string;
@@ -7,9 +10,11 @@ interface Props {
   layoutClass: string;
   frameClass: string;
   cropFocus?: "center" | "top" | "upper-third";
+  visualWeight?: "support" | "standard" | "dominant" | "hero";
 }
 
 const {
+  slug,
   title,
   image,
   descriptor,
@@ -17,6 +22,7 @@ const {
   layoutClass,
   frameClass,
   cropFocus = "center",
+  visualWeight = "standard",
 } = Astro.props;
 
 const objectPositionMap = {
@@ -26,22 +32,28 @@ const objectPositionMap = {
 } as const;
 ---
 
-<article class:list={["project-card", layoutClass]}>
-  <div class:list={["project-card__image-wrap", frameClass]} data-project-reveal data-reveal-state="pending">
-    <div class="project-card__overlay"></div>
-    <img
-      src={image}
-      alt={title}
-      class="project-card__image"
-      style={`object-position: ${objectPositionMap[cropFocus]}; object-fit: cover;`}
-      loading="lazy"
-      decoding="async"
-    />
-    <div class="project-card__hover-copy">
-      <h2 class="project-card__hover-title">{title}</h2>
-      <p class="project-card__hover-descriptor">{descriptor}</p>
+<article
+  class:list={["project-card", layoutClass]}
+  data-project-slug={slug}
+  data-visual-weight={visualWeight}
+>
+  <a class="project-card__link" href={projectPath(slug)} aria-label={`View ${title}`}>
+    <div class:list={["project-card__image-wrap", frameClass]} data-project-reveal data-reveal-state="pending">
+      <div class="project-card__overlay"></div>
+      <img
+        src={image}
+        alt={title}
+        class="project-card__image"
+        style={`object-position: ${objectPositionMap[cropFocus]}; object-fit: cover;`}
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="project-card__hover-copy">
+        <h2 class="project-card__hover-title">{title}</h2>
+        <p class="project-card__hover-descriptor">{descriptor}</p>
+      </div>
     </div>
-  </div>
+  </a>
   {indexLabel && (
     <div class="project-card__meta">
       <p class="project-card__index">{indexLabel}</p>
@@ -55,6 +67,13 @@ const objectPositionMap = {
     flex-direction: column;
     gap: 0.72rem;
     min-width: 0;
+  }
+
+  .project-card__link {
+    display: block;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
   }
 
   .project-card__image-wrap {
@@ -158,6 +177,14 @@ const objectPositionMap = {
   .project-card:focus-within .project-card__image {
     filter: brightness(0.95);
     transform: scale(1.006);
+  }
+
+  .project-card__link:focus-visible {
+    outline: none;
+  }
+
+  .project-card__link:focus-visible .project-card__image-wrap {
+    box-shadow: 0 0 0 1px rgba(18, 16, 13, 0.18);
   }
 
   .project-card:hover .project-card__overlay,

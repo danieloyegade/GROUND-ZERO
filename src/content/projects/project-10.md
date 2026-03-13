@@ -1,12 +1,13 @@
 ---
 title: "Isaac"
-slug: "Isaac"
+slug: "isaac"
 image: "/images/project-10.jpg"
 descriptor: "Manchester, 2025."
-display:
-  orientation: "landscape"
-  cropFocus: "upper-third"
-  size: "medium"
+order: 10
+layoutPattern: "offset-right"
+visualWeight: "standard"
+orientation: "landscape"
+cropFocus: "upper-third"
 status: "placeholder"
 ---
 

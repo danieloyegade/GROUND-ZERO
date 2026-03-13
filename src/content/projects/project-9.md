@@ -1,12 +1,13 @@
 ---
 title: "DJ Paullette for SEEN MAG"
-slug: "DJ Paullette for SEEN MAG"
+slug: "dj-paullette-for-seen-mag"
 image: "/images/project-9.jpg"
 descriptor: "Photographed by Daniel Oyegade."
-display:
-  orientation: "landscape"
-  cropFocus: "upper-third"
-  size: "large"
+order: 9
+layoutPattern: "tail-right"
+visualWeight: "support"
+orientation: "landscape"
+cropFocus: "upper-third"
 status: "placeholder"
 ---
 
