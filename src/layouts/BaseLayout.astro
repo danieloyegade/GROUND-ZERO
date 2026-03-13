@@ -4,11 +4,13 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  preloadImage?: string;
 }
 
 const {
   title,
   description = "GROUND ZERO is a minimal editorial portfolio built with Astro.",
+  preloadImage,
 } = Astro.props;
 
 const canonicalPath = Astro.url.pathname.endsWith("/")
@@ -24,6 +26,7 @@ const canonicalUrl = new URL(canonicalPath, Astro.site ?? Astro.url);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} />}
     <title>{title}</title>
   </head>
   <body class="bg-[var(--page-background)] text-[var(--page-foreground)] antialiased">

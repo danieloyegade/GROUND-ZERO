@@ -3,35 +3,37 @@ const floorLabels = [
   {
     text: "EIGHTH FLOOR",
     style:
-      "top: 13%; right: clamp(1.5rem, 4vw, 4rem); --label-delay: 0ms; --label-duration: 1000ms;",
+      "top: 12%; --label-delay: 0ms; --label-duration: 1150ms; --label-tracking: 0.145em;",
   },
   {
     text: "FOURTH FLOOR",
     style:
-      "top: 28%; right: clamp(1.5rem, 4vw, 4rem); --label-delay: 1000ms; --label-duration: 900ms;",
+      "top: 28%; --label-delay: 1150ms; --label-duration: 1000ms; --label-tracking: 0.148em;",
   },
   {
     text: "FIRST FLOOR",
     style:
-      "top: 44%; right: clamp(1.5rem, 4vw, 4rem); --label-delay: 1900ms; --label-duration: 900ms;",
+      "top: 44%; --label-delay: 2150ms; --label-duration: 925ms; --label-tracking: 0.164em;",
   },
   {
     text: "GROUND FLOOR",
     style:
-      "top: 60%; right: clamp(1.5rem, 4vw, 4rem); --label-delay: 2800ms; --label-duration: 900ms;",
+      "top: 60%; --label-delay: 3075ms; --label-duration: 975ms; --label-tracking: 0.144em;",
   },
   {
     text: "GROUND ZERO",
     style:
-      "right: clamp(1.5rem, 4vw, 4rem); bottom: 10%; --label-delay: 3700ms; --label-duration: 2000ms;",
+      "bottom: 8%; --label-delay: 4050ms; --label-duration: 1650ms; --label-tracking: 0.156em;",
   },
 ];
 ---
 
 <div
   class="intro-overlay"
+  data-intro-overlay
+  data-ready="false"
   aria-hidden="true"
-  style="--pre-swipe-duration: 5700ms; --swipe-duration: 800ms;"
+  style="--image-settle-delay: 220ms; --pre-swipe-duration: 5700ms; --swipe-duration: 800ms;"
 >
   <div class="intro-overlay__image-wrap">
     <img
@@ -40,6 +42,7 @@ const floorLabels = [
       class="intro-overlay__image"
       loading="eager"
       decoding="async"
+      fetchpriority="high"
     />
     <div class="intro-overlay__scrim"></div>
   </div>
@@ -58,14 +61,49 @@ const floorLabels = [
   </div>
 </div>
 
+<script is:inline>
+  const overlay = document.querySelector("[data-intro-overlay]");
+  const image = overlay?.querySelector(".intro-overlay__image");
+
+  const markReady = () => {
+    if (!overlay || overlay.getAttribute("data-ready") === "true") return;
+
+    requestAnimationFrame(() => {
+      overlay.setAttribute("data-ready", "true");
+    });
+  };
+
+  const waitForDecode = () => {
+    if (!image) {
+      markReady();
+      return;
+    }
+
+    if (typeof image.decode === "function") {
+      image.decode().catch(() => {}).finally(markReady);
+      return;
+    }
+
+    markReady();
+  };
+
+  if (image?.complete && image.naturalWidth > 0) {
+    waitForDecode();
+  } else if (image) {
+    image.addEventListener("load", waitForDecode, { once: true });
+    image.addEventListener("error", markReady, { once: true });
+  } else {
+    markReady();
+  }
+</script>
+
 <style>
   .intro-overlay {
     position: fixed;
     inset: 0;
     z-index: 40;
     overflow: hidden;
-    animation: intro-plane-swipe var(--swipe-duration) cubic-bezier(0.42, 0, 0.18, 1)
-      var(--pre-swipe-duration) forwards;
+    background: #050505;
     will-change: transform, visibility;
   }
 
@@ -81,67 +119,91 @@ const floorLabels = [
     width: 100%;
     height: 100%;
     object-fit: cover;
+    opacity: 0;
+    transition: opacity 260ms ease-out;
   }
 
   .intro-overlay__scrim {
     background:
       linear-gradient(to bottom, rgba(10, 10, 10, 0.32), rgba(10, 10, 10, 0.2)),
       linear-gradient(to right, rgba(10, 10, 10, 0.12), rgba(10, 10, 10, 0));
+    opacity: 0;
+    transition: opacity 260ms ease-out;
   }
 
   .intro-overlay__labels {
+    --rail-inline-end: clamp(1.5rem, 4vw, 4rem);
+    --rail-width: clamp(12rem, 18vw, 15rem);
     padding: clamp(1.5rem, 3vw, 3rem);
   }
 
   .intro-overlay__label {
     position: absolute;
-    width: min(20rem, calc(100vw - 3rem));
+    right: var(--rail-inline-end);
+    width: min(var(--rail-width), calc(100vw - (var(--rail-inline-end) * 2)));
     margin: 0;
+    white-space: nowrap;
     font-family: var(--font-sans);
-    font-size: clamp(1.15rem, 2.4vw, 2.35rem);
+    font-size: clamp(1.08rem, 2.15vw, 2.1rem);
     font-weight: 500;
-    letter-spacing: 0.15em;
-    line-height: 0.98;
+    letter-spacing: var(--label-tracking, 0.15em);
+    line-height: 0.96;
     text-align: right;
     text-transform: uppercase;
     color: rgba(247, 243, 235, 0.96);
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.14), 0 3px 12px rgba(0, 0, 0, 0.18);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.16);
+    font-kerning: none;
+    font-variant-ligatures: none;
+    transform-origin: 100% 50%;
     opacity: 0;
     transform: translate3d(0, -0.8rem, 0);
-    animation: intro-label var(--label-duration) cubic-bezier(0.32, 0, 0.18, 1)
-      var(--label-delay) forwards;
   }
 
-  .intro-overlay__label.is-final {
+  .intro-overlay[data-ready="true"] .intro-overlay__image,
+  .intro-overlay[data-ready="true"] .intro-overlay__scrim {
+    opacity: 1;
+  }
+
+  .intro-overlay[data-ready="true"] {
+    animation: intro-plane-swipe var(--swipe-duration) cubic-bezier(0.42, 0, 0.18, 1)
+      calc(var(--image-settle-delay) + var(--pre-swipe-duration)) forwards;
+  }
+
+  .intro-overlay[data-ready="true"] .intro-overlay__label {
+    animation: intro-label var(--label-duration) cubic-bezier(0.32, 0, 0.18, 1)
+      calc(var(--image-settle-delay) + var(--label-delay)) forwards;
+  }
+
+  .intro-overlay[data-ready="true"] .intro-overlay__label.is-final {
     animation: intro-final-label var(--label-duration) cubic-bezier(0.32, 0, 0.18, 1)
-      var(--label-delay) forwards;
+      calc(var(--image-settle-delay) + var(--label-delay)) forwards;
   }
 
   @keyframes intro-label {
     0% {
       opacity: 0;
-      transform: translate3d(0, -0.8rem, 0);
+      transform: translate3d(0, -0.65rem, 0);
     }
 
-    22%,
-    78% {
+    18%,
+    72% {
       opacity: 1;
       transform: translate3d(0, 0, 0);
     }
 
     100% {
       opacity: 0;
-      transform: translate3d(0, 0.55rem, 0);
+      transform: translate3d(0, 0.38rem, 0);
     }
   }
 
   @keyframes intro-final-label {
     0% {
       opacity: 0;
-      transform: translate3d(0, -0.8rem, 0);
+      transform: translate3d(0, -0.65rem, 0);
     }
 
-    18%,
+    14%,
     100% {
       opacity: 1;
       transform: translate3d(0, 0, 0);
@@ -167,9 +229,14 @@ const floorLabels = [
   }
 
   @media (max-width: 40rem) {
+    .intro-overlay__labels {
+      --rail-inline-end: 1.25rem;
+      --rail-width: min(13rem, calc(100vw - 2.5rem));
+    }
+
     .intro-overlay__label {
-      letter-spacing: 0.14em;
-      width: min(16rem, calc(100vw - 2.5rem));
+      font-size: clamp(1rem, 5vw, 1.32rem);
+      letter-spacing: calc(var(--label-tracking, 0.15em) - 0.01em);
     }
   }
 

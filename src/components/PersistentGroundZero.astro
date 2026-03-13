@@ -1,0 +1,50 @@
+<div class="persistent-ground-zero" aria-hidden="true">
+  <p class="persistent-ground-zero__label">GROUND ZERO</p>
+</div>
+
+<style>
+  .persistent-ground-zero {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .persistent-ground-zero__label {
+    --rail-inline-end: clamp(1.5rem, 4vw, 4rem);
+    --rail-width: clamp(12rem, 18vw, 15rem);
+    margin: 0;
+    width: min(var(--rail-width), calc(100vw - (var(--rail-inline-end) * 2)));
+    padding-right: var(--rail-inline-end);
+    padding-bottom: clamp(1.75rem, 8vh, 4.75rem);
+    font-family: var(--font-sans);
+    font-size: clamp(1.08rem, 2.15vw, 2.1rem);
+    font-weight: 500;
+    letter-spacing: 0.156em;
+    line-height: 0.96;
+    text-align: right;
+    text-transform: uppercase;
+    color: rgba(22, 20, 18, 0.54);
+    font-kerning: none;
+    font-variant-ligatures: none;
+    white-space: nowrap;
+    transition: opacity 180ms ease-out;
+    pointer-events: auto;
+    user-select: none;
+  }
+
+  .persistent-ground-zero__label:hover {
+    opacity: 0.08;
+  }
+
+  @media (max-width: 40rem) {
+    .persistent-ground-zero__label {
+      --rail-inline-end: 1.25rem;
+      --rail-width: min(13rem, calc(100vw - 2.5rem));
+      font-size: clamp(1rem, 5vw, 1.32rem);
+      letter-spacing: 0.146em;
+      padding-bottom: clamp(1.35rem, 5vh, 2.4rem);
+    }
+  }
+ </style>
